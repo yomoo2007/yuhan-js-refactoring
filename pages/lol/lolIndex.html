@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- LoL 검색 폼과 소환사 프로필 화면. 파일 설명: docs/files/lolIndex.html.md -->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../../">
+  <title>리그 오브 레전드 전적 검색 | PORO.GG</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css" />
+  <link rel="stylesheet" href="./assets/css/common/common.css">
+  <link rel="stylesheet" href="./assets/css/common/header.css">
+  <link rel="stylesheet" href="./assets/css/lol/lolFetch.css">
+  <link rel="stylesheet" href="./assets/css/lol/lol-entry.css">
+  <link rel="stylesheet" href="./assets/css/common/theme.css">
+</head>
+<body>
+<header id="site-header" class="shared-header" data-page="lol"></header>
+  <section class="lol-search-panel" aria-labelledby="lol-search-title">
+    <h1 id="lol-search-title">리그 오브 레전드 전적 검색</h1>
+    <form id="lol-search" class="lol-search-form">
+      <label for="lol-region">서버</label>
+      <select id="lol-region" name="region">
+        <option value="KR">KR</option>
+        <option value="JP">JP</option>
+        <option value="NA">NA</option>
+        <option value="EUW">EUW</option>
+      </select>
+      <label for="lol-riot-id" class="lol-input-label">Riot ID</label>
+      <input id="lol-riot-id" type="search" placeholder="플레이어 이름#태그" autocomplete="off" maxlength="100" required>
+      <button type="submit">전적 검색</button>
+    </form>
+    <p id="lol-search-help">플레이어 이름과 태그를 입력해 전적을 검색하세요.</p>
+  </section>
+  <div class="content-header" hidden>
+    <div class="content-inner">
+      <div class="flex-box">
+        <div class="profile-wrapper">
+          <img src="#" alt="프로필 이미지" class="profile-img hidden">
+          <p class="profile-text"></p>
+        </div>
+        <div class="info-box">
+          <p class="profile-title"></p>
+          <div class="ladder-ranking-wrapper">
+            <p class="region-wrapper"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-header__bottom">
+      <ul class="content-header__bottom-inner">
+        <li class="content-header__bottom-item content-header__bottom-item--active">
+          <a href="#" class="content-header__bottom-item-title">종합</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Script Start -->
+  <script src="./assets/js/shared/theme.js"></script>
+  <script src="./assets/js/shared/header.js"></script>
+  <script src="./assets/js/shared/assets.js"></script>
+  <!-- 공개 메타데이터 → 서버 프록시 → 화면 코드 순서를 유지합니다. -->
+  <script src="./assets/js/lol/riot-public.js"></script>
+  <script src="./assets/js/lol/lolFetch.js"></script>
+  <script src="./assets/js/lol/lolIndex.js"></script>
+  <!-- Script End -->
+</body>
+</html>

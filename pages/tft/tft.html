@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<!-- TFT 검색·전적·통계 화면의 HTML 진입점. 파일 설명: docs/files/tft.html.md -->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PORO.GG TFT 전적검색 프로토타입. 나의 순위, 시너지와 최근 플레이를 한눈에 확인하세요.">
+  <meta name="theme-color" content="#4169e1">
+  <base href="../../">
+  <title>TFT 전적검색 | PORO.GG</title>
+  <link rel="stylesheet" href="./assets/css/common/common.css">
+  <link rel="stylesheet" href="./assets/css/common/layouts.css">
+  <link rel="stylesheet" href="./assets/css/common/theme.css">
+  <link rel="stylesheet" href="./assets/css/common/header.css">
+  <link rel="stylesheet" href="./assets/css/tft/tft.css">
+  <link rel="stylesheet" href="./assets/css/tft/tft-extras.css">
+  <link rel="stylesheet" href="./assets/css/tft/tft-loading.css">
+  <link rel="preload" as="image" href="./assets/images/tft/loading/teemo-throw-five.png">
+  <link rel="preload" as="image" href="./assets/images/tft/loading/mushroom-green.png">
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 이동</a>
+  <header id="site-header" class="shared-header" data-page="tft"></header>
+  <div class="sub-header">
+    <div class="sub-inner"><div class="section-name">TFT<span>전적검색</span></div>
+      <form class="search-form" id="search-form" role="search">
+        <label class="sr-only" for="region">서버</label>
+        <select id="region">
+          <option value="KR">KR</option>
+          <option value="JP">JP</option>
+          <option value="NA">NA</option>
+          <option value="EUW">EUW</option>
+        </select>
+        <span class="search-divider"></span>
+        <label class="sr-only" for="riot-id">Riot ID</label>
+        <input id="riot-id" type="search" placeholder="플레이어 이름 + #태그" autocomplete="off" maxlength="60" required>
+        <button type="submit" aria-label="전적 검색">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="10.5" cy="10.5" r="6.5"/>
+            <path d="m16 16 5 5"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+  <main id="main" class="container">
+    <p id="search-message" class="search-message" role="alert"></p>
+    <section id="search-empty" class="search-empty" aria-labelledby="search-empty-title">
+      <h1 id="search-empty-title">TFT 전적 검색</h1>
+      <p>Riot ID와 태그를 입력해 전적을 검색해 보세요.</p>
+    </section>
+    <div id="search-results" hidden>
+    <div class="breadcrumb">
+      <span>전략적 팀 전투</span>
+      <span> / </span>
+      <strong>플레이어 전적</strong>
+      <span class="demo-badge">
+        <i></i> SAMPLE DATA
+      </span>
+    </div>
+    <section class="profile-panel" aria-labelledby="player-name">
+      <div class="profile-main">
+        <div class="avatar-wrap">
+          <img class="profile-avatar" src="./assets/images/tft/profiles/profile-29.jpg" alt="샘플 플레이어의 Riot 프로필 아이콘">
+          <span class="avatar-level">128</span>
+        </div>
+        <div class="player-copy">
+          <div class="player-eyebrow">
+            <span id="player-region">KR</span>
+            오늘도 한 판, 즐거운 전략.
+          </div>
+          <div class="player-title">
+            <h1 id="player-name">협곡의 산책자</h1>
+            <span id="player-tag">#DEMO</span>
+            <button id="favorite" class="favorite" aria-label="즐겨찾기 추가" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2.5 15 8.8 22 9.7 17 14.6 18.2 21.5 12 18.2 5.8 21.5 7 14.6 2 9.7 9 8.8Z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="previous-rank">
+            <span>시즌 최고 <b>DIAMOND II</b></span>
+            <span class="profile-dot">·</span>
+            <span>티모 정찰대</span>
+          </div>
+          <div class="profile-actions">
+            <button id="refresh" class="primary-button">
+              <span aria-hidden="true">↻</span> 전적 갱신
+            </button>
+            <button id="preview-loading" class="preview-loading">로딩 미리보기</button>
+            <button class="preview-loading" data-preview-feedback="error">실패 화면</button>
+            <button class="preview-loading" data-preview-feedback="not-found">유저 없음</button>
+            <span id="updated">예시 플레이어의 전적입니다</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="page-tabs">
+      <a class="selected" href="#match-history">종합 전적</a>
+      <span class="season-note">세트 17 · Space Gods</span>
+    </div>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <section class="panel rank-panel">
+          <div class="panel-heading">
+            <h2>랭크</h2>
+            <span class="subtle">솔로 랭크</span>
+          </div>
+          <div class="rank-summary">
+            <div class="rank-emblem">
+              <img id="rank-emblem" src="./assets/images/tft/ranks/rank-diamond.png" alt="다이아몬드 랭크 문양">
+            </div>
+            <div>
+              <p class="rank-label" id="rank-label">DIAMOND II</p>
+              <p class="rank-points" id="rank-points">72 <span>LP</span></p>
+              <p class="rank-total">총 216게임</p>
+            </div>
+          </div>
+          <div class="rank-progress">
+            <div>
+              <span>다음 티어까지</span>
+              <b>28 LP</b>
+            </div>
+            <span class="progress-track"><i style="width:72%"></i></span>
+          </div>
+          <div class="rank-footer">
+            <span>1위 비율 <strong>31.5%</strong></span>
+            <span>시즌 전체 기록</span>
+          </div>
+        </section>
+      </aside>
+      <section class="history-column" id="match-history" aria-labelledby="history-title">
+        <section class="overview panel" aria-labelledby="summary-title">
+          <div class="overview-heading">
+            <h2 id="summary-title">최근 20게임 등수</h2>
+            <span class="overview-note">전체 모드 · 예시 데이터</span>
+          </div>
+          <div class="history-summary">
+            <div class="summary-left">
+              <div class="summary-metrics">
+                <div>
+                  <span>평균 등수</span>
+                  <strong id="average">#3.2</strong>
+                </div>
+                <div>
+                  <span>1등 횟수</span>
+                  <strong class="first-text" id="win-count">5</strong>
+                </div>
+                <div>
+                  <span>TOP 4 이내</span>
+                  <strong id="top-count">15</strong>
+                </div>
+              </div>
+              <div id="placement-trend" class="placement-trend" aria-label="최근 20게임 순위"></div>
+              <span class="summary-caption">최근 게임부터 표시 · TOP = 4위 이내</span>
+            </div>
+            <div class="distribution-panel">
+              <div class="chart-wrap">
+                <div id="chart-axis" class="chart-axis" aria-hidden="true"></div>
+                <div id="distribution" class="distribution" role="img" aria-label="등수별 게임 수"></div>
+              </div>
+              <div class="distribution-caption">
+                <span id="distribution-status" role="status"></span>
+                <button id="distribution-retry" type="button" hidden>집계 다시 시도</button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="panel rank-history-panel" aria-labelledby="rank-history-title">
+          <div class="rank-history-heading">
+            <div>
+              <h2 id="rank-history-title">티어 그래프 <span>LP HISTORY</span></h2>
+            </div>
+            <span class="season-history-label">세트 17 전체</span>
+          </div>
+          <div class="rank-chart-layout">
+            <div class="rank-chart-summary">
+              <span>기간 내 변화</span>
+              <strong id="period-lp-change">+244 <small>LP</small></strong>
+              <p id="rank-chart-range">DIAMOND IV → II</p>
+              <small>날짜별 저장 기록 · 예시</small>
+            </div>
+            <div class="rank-chart-main">
+              <div class="rank-chart-wrap">
+                <div id="rank-chart" class="rank-chart"></div>
+              </div>
+              <p id="rank-chart-readout" class="rank-chart-readout" aria-live="polite">그래프의 점에 마우스를 올리거나 탭해 기록을 확인하세요.</p>
+            </div>
+          </div>
+        </section>
+        <section class="panel usage-panel" aria-labelledby="usage-title">
+          <div class="usage-heading">
+            <div>
+              <h2 id="usage-title">자주 사용한 챔피언 &amp; 시너지</h2>
+              <p id="usage-sample"></p>
+            </div>
+            <label>
+              <span class="sr-only">통계 집계 게임 수</span>
+              <select id="stats-limit">
+                <option value="10">최근 10게임</option>
+                <option value="20" selected>최근 20게임</option>
+                <option value="50">최근 50게임</option>
+              </select>
+            </label>
+          </div>
+          <div class="usage-tables">
+            <div>
+              <h3>챔피언 통계</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>챔피언</th>
+                    <th>사용</th>
+                    <th>평균 등수</th>
+                    <th>TOP 4</th>
+                  </tr>
+                </thead>
+                <tbody id="champion-usage">
+
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h3>활성 시너지 통계</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>시너지</th>
+                    <th>사용</th>
+                    <th>평균 등수</th>
+                    <th>TOP 4</th>
+                  </tr>
+                </thead>
+                <tbody id="trait-usage">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button id="usage-expand" class="usage-expand">전체 챔피언·시너지 통계 보기 ↓</button>
+        </section>
+        <div class="history-heading">
+          <h2 id="history-title">매치 히스토리 <span id="match-count">20</span></h2>
+          <span class="history-key">
+            <i class="first-dot"></i> 1위
+            <i></i> TOP 4
+            <i></i> 하위 순위
+          </span>
+        </div>
+        <div class="portrait-toolbar">
+          <span>챔피언 초상화</span>
+          <div class="portrait-switch" role="group" aria-label="챔피언 이미지 종류">
+            <button data-portrait-mode="tft" aria-pressed="true" class="active">TFT 스킨</button>
+            <button data-portrait-mode="base" aria-pressed="false">기본 챔피언</button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <div class="mode-filters" role="group" aria-label="게임 모드">
+            <button class="active" data-mode="all" aria-pressed="true">전체</button>
+            <button data-mode="ranked" aria-pressed="false">솔로 랭크</button>
+            <button data-mode="normal" aria-pressed="false">일반</button>
+            <button data-mode="double" aria-pressed="false">더블 업</button>
+          </div>
+          <label class="placement-filter">
+            <span class="sr-only">등수 필터</span>
+            <select id="placement-filter">
+              <option value="all">모든 등수</option>
+              <option value="top">TOP 4</option>
+              <option value="win">1위</option>
+            </select>
+          </label>
+        </div>
+        <div id="match-list" class="match-list"></div>
+        <button id="load-more" class="load-more">전적 더 보기 <span>⌄</span></button>
+        <p class="demo-disclaimer">이 화면의 플레이어·전적·순위는 UI 확인을 위한 예시 데이터입니다.</p>
+      </section>
+    </div>
+    </div>
+    <footer id="footer" class="site-footer"></footer>
+  </main>
+  <!-- 공통 로딩창: 필수 내부 ID와 클래스는 loading.js에서 참조합니다. -->
+  <dialog id="loading-dialog" class="loading-dialog" aria-labelledby="loading-title" aria-describedby="loading-description">
+    <button id="loading-close" class="loading-close" aria-label="로딩 취소">×</button>
+    <div class="loader-kicker">TEEMO'S SCOUTING REPORT</div>
+    <div id="loader-stage" class="loader-stage" role="img" aria-label="티모가 두 손으로 버섯을 던지면 설치된 버섯 세 개 위를 차례로 튕겨 가는 애니메이션">
+      <canvas class="teemo-sprite" width="560" height="512" aria-hidden="true"></canvas>
+      <img class="planted-mushroom mushroom-one" src="./assets/images/tft/loading/mushroom-green.png" alt="">
+      <img class="planted-mushroom mushroom-two" src="./assets/images/tft/loading/mushroom-green.png" alt="">
+      <img class="planted-mushroom mushroom-three" src="./assets/images/tft/loading/mushroom-green.png" alt="">
+      <img class="flying-mushroom" src="./assets/images/tft/loading/mushroom-green.png" alt="">
+      <span class="bounce-ring ring-one" aria-hidden="true"></span>
+      <span class="bounce-ring ring-two" aria-hidden="true"></span>
+      <span class="bounce-ring ring-three" aria-hidden="true"></span>
+      <span class="loader-ground" aria-hidden="true"></span>
+    </div>
+    <h2 id="loading-title">전적을 정찰하고 있어요</h2>
+    <p id="loading-description">하나, 둘, 통통! 티모가 기록을 가져오는 중이에요.</p>
+    <div class="loader-status" role="status"><span></span><span></span><span></span><small>잠시만 기다려 주세요</small></div>
+    <p class="loader-demo-note">프로토타입 로딩 미리보기</p>
+  </dialog>
+  <!-- TFT 오류 안내창: 오류 종류·재시도는 tft-feedback.js에서 처리합니다. -->
+  <dialog id="feedback-dialog" class="feedback-dialog" aria-labelledby="feedback-title" aria-describedby="feedback-description feedback-detail">
+    <button id="feedback-close" class="loading-close" aria-label="안내 닫기">×</button>
+    <div class="loader-kicker">TEEMO'S SCOUTING REPORT</div>
+    <img id="feedback-art" class="feedback-art" alt="">
+    <h2 id="feedback-title"></h2>
+    <p id="feedback-description"></p>
+    <p id="feedback-detail" class="feedback-detail"></p>
+    <button id="feedback-action" class="primary-button">확인</button>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="trait-tooltip" class="trait-tooltip" role="tooltip" hidden></div>
+  <!-- 전체 시너지 패널: 네이티브 dialog가 아니며 hidden으로 표시를 제어합니다. -->
+  <div id="trait-all-card" class="trait-all-card" role="dialog" aria-modal="false" aria-labelledby="trait-all-title" hidden></div>
+  <div id="champion-traits-tooltip" class="champion-traits-tooltip" role="tooltip" hidden></div>
+  <div id="rank-chart-tooltip" class="rank-chart-tooltip" role="tooltip" hidden></div>
+
+  <!-- Script Start -->
+  <script src="./assets/js/shared/assets.js" defer></script>
+  <script src="./assets/js/shared/theme.js"></script>
+  <script src="./assets/js/shared/header.js"></script>
+  <script src="./assets/js/shared/footer.js"></script>
+  <!-- 아래 defer 스크립트는 선언 순서대로 의존 모듈을 준비합니다. -->
+  <script src="./assets/data/tft/tft-set17-data.js" defer></script>
+  <script src="./assets/js/tft/tft-model.js" defer></script>
+  <script src="./assets/js/tft/tft-rank.js" defer></script>
+  <script src="./assets/js/tft/tft-store.js" defer></script>
+  <script src="./assets/js/lol/riot-public.js" defer></script>
+  <script src="./assets/js/tft/tft-api.js" defer></script>
+  <script src="./assets/js/tft/tft-traits.js" defer></script>
+  <script src="./assets/js/tft/tft-rank-ui.js" defer></script>
+  <script src="./assets/js/shared/loading.js" defer></script>
+  <script src="./assets/js/tft/tft-feedback.js" defer></script>
+  <script src="./assets/js/tft/tft.js" defer></script>
+  <!-- Script End -->
+</body>
+</html>

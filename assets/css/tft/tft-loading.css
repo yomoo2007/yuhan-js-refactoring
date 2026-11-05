@@ -1,0 +1,78 @@
+/* 메인·TFT 공통 로딩창과 버섯 애니메이션 스타일. 파일 설명: docs/files/css/tft-loading.css.md */
+/* 메인과 TFT 화면에서 함께 사용하는 티모 로딩 애니메이션입니다. */
+.loading-open { overflow: hidden; }
+.loading-dialog { margin: auto; line-height: 1.5; width: min(540px,calc(100vw - 32px)); max-width: none; box-sizing: border-box; padding: 35px 28px 26px; border: 1px solid #e9edf3; border-radius: 20px; background: #fff; color: #34435c; text-align: center; box-shadow: 0 25px 100px #20345226; overflow: hidden; }
+.loading-dialog::backdrop { background: #eaf0f7b3; backdrop-filter: blur(5px); }
+.loading-close { border: 0; cursor: pointer; position: absolute; right: 14px; top: 9px; width: 30px; height: 30px; padding: 0; background: transparent; color: #9aa7ba; font-size: 24px; font-weight: 300; }
+.loader-kicker { font-size: 8px; font-weight: 650; letter-spacing: 2px; color: #92a69b; }
+.loader-stage { position: relative; width: 100%; aspect-ratio: 2.7; margin: 4px auto 20px; isolation: isolate; }
+/* JavaScript가 선택한 영역만 그리며 모든 자세는 동일한 발 위치를 기준으로 정렬합니다. */
+.teemo-sprite { position: absolute; left: 0; bottom: 6%; width: 29.7%; height: auto; aspect-ratio: 560 / 512; z-index: 3; }
+.planted-mushroom { position: absolute; bottom: 1%; width: 14.3%; aspect-ratio: 1; object-fit: contain; z-index: 2; transform-origin: 50% 85%; }
+.mushroom-one { left: 41.35%; }
+.mushroom-two { left: 62.35%; }
+.mushroom-three { left: 83.35%; }
+.flying-mushroom { position: absolute; width: 11.7%; margin-left: -1.35%; aspect-ratio: 1; object-fit: contain; left: 23%; bottom: 44%; z-index: 4; opacity: 0; transform-origin: center; }
+.loader-ground { position: absolute; bottom: 7%; left: 7%; right: 3%; height: 1px; background: linear-gradient(90deg,transparent,#dfe7e1 20%,#dfe7e1 85%,transparent); z-index: -1; }
+.bounce-ring { position: absolute; bottom: 14%; width: 13%; height: 8%; border: 2px solid #c1d8a7; border-radius: 50%; opacity: 0; z-index: 1; }
+.ring-one { left: 42%; }
+.ring-two { left: 63%; }
+.ring-three { left: 84%; }
+.loading-dialog h2 { font-size: 18px; font-weight: 700; letter-spacing: -.5px; }
+.loading-dialog > p:not(.loader-demo-note) { font-size: 11px; color: #92a0b2; margin-top: 9px; }
+.loader-status { display: flex; justify-content: center; align-items: center; gap: 4px; margin-top: 24px; }
+.loader-status > span { width: 4px; height: 4px; background: #89aa85; border-radius: 50%; }
+.loader-status small { font-size: 9px; color: #9baa9b; margin-left: 5px; }
+.loading-dialog[open] .loader-status > span { animation: loader-dot-fade 1.2s ease-in-out infinite; }
+.loading-dialog[open] .loader-status > span:nth-child(2) { animation-delay: .16s; }
+.loading-dialog[open] .loader-status > span:nth-child(3) { animation-delay: .32s; }
+.loading-dialog[open] .loader-status > small { animation: loader-text-fade 1.8s ease-in-out infinite; }
+@keyframes loader-dot-fade { 0%,100% { opacity: 0; } 45%,55% { opacity: 1; } }
+@keyframes loader-text-fade { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.loader-demo-note { font-size: 8px; color: #bec6cf; margin-top: 16px; }
+.is-playing .flying-mushroom { animation: mushroom-hop var(--loader-cycle,1800ms) linear infinite; }
+.is-playing .mushroom-one { animation: mushroom-squash-one var(--loader-cycle,1800ms) linear infinite; }
+.is-playing .mushroom-two { animation: mushroom-squash-two var(--loader-cycle,1800ms) linear infinite; }
+.is-playing .mushroom-three { animation: mushroom-squash-three var(--loader-cycle,1800ms) linear infinite; }
+.is-playing .ring-one { animation: impact-one var(--loader-cycle,1800ms) linear infinite; }
+.is-playing .ring-two { animation: impact-two var(--loader-cycle,1800ms) linear infinite; }
+.is-playing .ring-three { animation: impact-three var(--loader-cycle,1800ms) linear infinite; }
+.is-playing .flying-mushroom,
+.is-playing .planted-mushroom,
+.is-playing .bounce-ring { animation-delay: var(--mushroom-release-delay,396ms); }
+  @keyframes mushroom-hop {
+    0% { left: 23%; bottom: 44%; opacity: 1; transform: rotate(0deg); }
+    7% { left: 28.25%; bottom: 69%; opacity: 1; transform: rotate(45deg); }
+    14% { left: 33.5%; bottom: 73%; opacity: 1; transform: rotate(90deg); }
+    21% { left: 38.75%; bottom: 57%; opacity: 1; transform: rotate(135deg); }
+    28% { left: 44%; bottom: 29%; opacity: 1; transform: rotate(180deg); }
+    35.25% { left: 49.25%; bottom: 55%; opacity: 1; transform: rotate(225deg); }
+    42.5% { left: 54.5%; bottom: 65%; opacity: 1; transform: rotate(270deg); }
+    49.75% { left: 59.75%; bottom: 55%; opacity: 1; transform: rotate(315deg); }
+    57% { left: 65%; bottom: 29%; opacity: 1; transform: rotate(360deg); }
+    64% { left: 70.25%; bottom: 51%; opacity: 1; transform: rotate(405deg); }
+    71% { left: 75.5%; bottom: 60%; opacity: 1; transform: rotate(450deg); }
+    78% { left: 80.75%; bottom: 51%; opacity: 1; transform: rotate(495deg); }
+    85% { left: 86%; bottom: 29%; opacity: 1; transform: rotate(540deg); }
+    92.5% { left: 93%; bottom: 51%; opacity: 1; transform: rotate(630deg); }
+    97% { opacity: 1; }
+    100% { left: 103%; bottom: 64%; opacity: 0; transform: rotate(720deg); }
+  }
+@keyframes mushroom-squash-one { 0%,26%,35%,100% { transform: scale(1); } 28% { transform: scale(1.17,.7); } 31% { transform: scale(.95,1.1); } }
+@keyframes mushroom-squash-two { 0%,55%,64%,100% { transform: scale(1); } 57% { transform: scale(1.17,.7); } 60% { transform: scale(.95,1.1); } }
+@keyframes mushroom-squash-three { 0%,83%,92%,100% { transform: scale(1); } 85% { transform: scale(1.17,.7); } 88% { transform: scale(.95,1.1); } }
+@keyframes impact-one { 0%,27% { opacity: 0; transform: scale(.6); } 28% { opacity: .8; transform: scale(.8); } 35%,100% { opacity: 0; transform: scale(1.8); } }
+@keyframes impact-two { 0%,56% { opacity: 0; transform: scale(.6); } 57% { opacity: .8; transform: scale(.8); } 64%,100% { opacity: 0; transform: scale(1.8); } }
+@keyframes impact-three { 0%,84% { opacity: 0; transform: scale(.6); } 85% { opacity: .8; transform: scale(.8); } 92%,100% { opacity: 0; transform: scale(1.8); } }
+
+@media(max-width:600px) {
+  .loading-dialog { padding: 33px 20px 24px; border-radius: 15px; }
+  .loading-dialog h2 { font-size: 16px; }
+  .loading-dialog > p:not(.loader-demo-note) { font-size: 10px; }
+  .loader-stage { margin-top: 16px; margin-bottom: 23px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .loading-dialog .loader-status > * { animation: none !important; opacity: 1; }
+  .is-playing * { animation: none !important; }
+  .flying-mushroom { opacity: 0; }
+}

@@ -1,0 +1,43 @@
+/* 공통 라이트·다크 테마 보정. 파일 설명: docs/files/css/theme.css.md */
+.theme-switch { display:flex; gap:2px; margin-left:auto; padding:3px; border:1px solid #ffffff40; border-radius:7px; flex-shrink:0; }
+.theme-switch button { border:0; padding:6px 8px; border-radius:4px; background:transparent; color:#e2eaff; font:inherit; font-size:11px; cursor:pointer; }
+.theme-switch button[aria-pressed="true"] { background:#fff; color:#3458ca; font-weight:700; }
+.game-logo { width:23px; height:23px; object-fit:contain; margin-right:7px; flex-shrink:0; }
+/* 저장된 다크 테마에 맞춰 페이지별 기본 색상을 덮어씁니다. */
+[data-theme="dark"] { color-scheme:dark; --bg:#141b27; --white:#202b3c; --text:#e2e9f5; --muted:#a3afc3; --line:#344055; --chart-grid:#344055; --blue:#5379e3; --blue-dark:#3d62cb; }
+[data-theme="dark"] body { background:var(--bg); color:var(--text); }
+[data-theme="dark"] :is(.rank-panel,.overview,.rank-history-panel,.usage-panel,.match-card,.sub-header,.load-more,.empty-state,.favorite,.usage-heading select,.placement-filter select,.feedback-dialog,.loading-dialog) { background:var(--white); color:var(--text); border-color:var(--line); }
+[data-theme="dark"] .profile-panel { background:linear-gradient(105deg,#202b3c 48%,#213737); border-color:var(--line); }
+[data-theme="dark"] :is(.search-form,.portrait-switch,.match-detail,.usage-tables th,#main-search input,#main-search select) { background:#182231; color:#c5d3e8; border-color:var(--line); }
+[data-theme="dark"] :is(.preview-loading,.portrait-switch button.active) { background:#2a3951; color:#c7d8ff; border-color:var(--line); }
+[data-theme="dark"] :is(.player-title h1,.rank-points,.summary-metrics strong,.usage-name,.usage-tables td,.equipped-champion,.feedback-dialog h2,.loading-dialog h2) { color:var(--text); }
+[data-theme="dark"] :is(.usage-tables h3,.record-header,.roster-player,.record-comp,.season-note,.player-eyebrow,.previous-rank,.rank-total,.summary-metrics span,.summary-caption,.rank-chart-summary,.rank-footer,.rank-progress,.usage-heading p,.synergy-group small,.profile-actions > span) { color:#a8b7d0; }
+[data-theme="dark"] :is(.record-header,.rank-footer,.overview-heading,.page-tabs,.filter-bar,.usage-tables td,.equipped-unit,.site-footer) { border-color:var(--line); }
+[data-theme="dark"] .rank-axis-label { fill:#b4c5df; }
+[data-theme="dark"] .rank-grid-line { stroke:#34465f; }
+[data-theme="dark"] :is(.loading-dialog,.feedback-dialog,#search-dialog)::backdrop { background:#08101db3; }
+[data-theme="dark"] .theme-switch button[aria-pressed="true"] { background:#dbe6ff; color:#1f3b7b; }
+[data-theme="dark"] .match-card { border-left-color:var(--result-color); }
+[data-theme="dark"] .synergy-more { background:#293952; color:#c7d8ff; border-color:var(--line); }
+[data-theme="dark"] .progress-track { background:#344055; }
+@media(max-width:600px) {
+  .theme-switch button { padding:5px; font-size:10px; }
+  .game-logo { width:18px; height:18px; margin-right:4px; }
+  .header-inner,.home-header-inner { gap:14px; }
+}
+@media(max-width:430px) {
+  .theme-switch { flex-wrap:wrap; width:51px; justify-content:center; }
+  .game-logo { width:16px; height:16px; }
+}
+
+[data-theme="dark"] #search-dialog { background:var(--white); color:var(--text); border-color:var(--line); }
+.theme-switch button { white-space:nowrap; }
+.game-nav .game-logo { margin-right:0; }
+@media(max-width:600px) {
+  :root { --header-height:104px; }
+  .header-inner,.home-header-inner { height:104px; padding:10px 16px 0; flex-wrap:wrap; gap:8px 18px; align-content:space-between; }
+  .game-nav,.home-nav { order:3; width:100%; height:42px; justify-content:center; gap:24px; flex-shrink:0; }
+  .game-nav a,.home-nav a { white-space:nowrap; }
+  .theme-switch { width:auto; flex-wrap:nowrap; }
+  .theme-switch button { padding:5px 8px; }
+}

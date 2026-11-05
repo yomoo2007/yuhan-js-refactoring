@@ -1,0 +1,6 @@
+.tft-cache/
+.tft-preview*.log
+/js/config.js
+/js/server/config.js
+.tft-preview.log
+.tft-preview-error.log

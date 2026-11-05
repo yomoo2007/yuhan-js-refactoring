@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- LoL·TFT 게임 선택 메인 화면. 파일 설명: docs/files/index.html.md -->
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="./">
+    <title>게임 전적 검색 | PORO.GG</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap">
+    <link rel="stylesheet" href="./assets/css/common/common.css">
+    <link rel="stylesheet" href="./assets/css/main/main.css">
+    <link rel="stylesheet" href="./assets/css/common/theme.css">
+    <link rel="stylesheet" href="./assets/css/common/header.css">
+  </head>
+  <body>
+    <header id="site-header" class="shared-header" data-page="home"></header>
+    <!-- 메인과 TFT에서 공유하는 티모 로딩창 -->
+    <!-- 메인 선택 화면 -->
+    <main id="stage" class="stage" data-state="">
+      <div class="video-layers" aria-hidden="true">
+        <div class="cinematic lol">
+          <div class="media">
+            <video muted loop autoplay playsinline preload="auto" aria-hidden="true" tabindex="-1">
+              <source src="./assets/video/lol-cinematic.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="shade"></div>
+        </div>
+        <div class="cinematic tft">
+          <div class="media">
+            <video muted loop autoplay playsinline preload="auto" aria-hidden="true" tabindex="-1">
+              <source src="./assets/video/tft-cinematic.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="shade"></div>
+        </div>
+      </div>
+
+      <a id="lol" class="panel lol" href="./pages/lol/lolIndex.html" data-game="lol" aria-label="League of Legends 전적 검색으로 이동">
+        <div class="copy">
+          <h2>LEAGUE<br>OF LEGENDS</h2>
+          <p>SUMMONER'S RIFT<br>League of Legends 전적 검색</p>
+        </div>
+      </a>
+
+      <a id="tft" class="panel tft" href="./pages/tft/tft.html" data-game="tft" aria-label="Teamfight Tactics 전적 검색으로 이동">
+        <div class="copy">
+          <h2>TEAMFIGHT<br>TACTICS</h2>
+          <p>STRATEGY<br>TFT 전적 검색</p>
+        </div>
+      </a>
+
+      <div id="fade" class="fade" aria-hidden="true"></div>
+    </main>
+
+    <!-- Script Start -->
+    <script src="./assets/js/shared/header.js"></script>
+    <script src="./assets/js/shared/theme.js"></script>
+    <script src="./assets/js/main/main.js"></script>
+    <!-- Script End -->
+  </body>
+</html>

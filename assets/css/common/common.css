@@ -1,0 +1,226 @@
+/* LoL 페이지 기본 초기화와 공통 레이아웃. 파일 설명: docs/files/css/common.css.md */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+
+/* 화면 전체에서 사용하는 색상·간격 등 기본 변수입니다. */
+:root {
+  --blue: #4169e1;
+  --blue-dark: #3458ca;
+  --mint: #239a86;
+  --text: #28334a;
+  --muted: #8993a5;
+  --line: #e8ebf1;
+  --bg: #f4f6f9;
+  --white: #fff;
+  --radius: 10px;
+  --chart-grid: #e4e8ef;
+  --text: #28334a;
+  --bg: #f4f6f9;
+}
+
+*,
+:after,
+:before {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+main,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #e9b950;
+  outline-offset: 4px;
+}
+
+button {
+  overflow: visible;
+  border: 0;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+input,
+button,
+textarea,
+select {
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  line-height: inherit;
+  border: 0;
+  background-color: transparent;
+}
+
+img {
+  max-width: 100vw;
+}
+
+.hidden {
+  display: none;
+}

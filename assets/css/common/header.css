@@ -1,0 +1,26 @@
+/* 세 페이지 공통 헤더·게임 메뉴·테마 버튼 스타일. 파일 설명: docs/files/css/header.css.md */
+:root { --header-height:65px; }
+html { scroll-padding-top:calc(var(--header-height) + 16px); }
+.shared-header { position:sticky; top:0; z-index:30; height:var(--header-height); background:var(--blue,#4169e1); color:#fff; box-shadow:0 1px 0 #20345218; font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI','Malgun Gothic',sans-serif; }
+.shared-header * { box-sizing:border-box; }
+.shared-header-inner { max-width:1240px; height:100%; margin:auto; padding:0 24px; display:flex; align-items:center; gap:56px; }
+.shared-wordmark { position:relative; display:inline-flex; align-items:baseline; flex-shrink:0; color:#fff; text-decoration:none; font-size:30px; font-weight:900; letter-spacing:-1.7px; line-height:1; }
+.shared-wordmark span { font-weight:650; }
+.shared-wordmark i { position:absolute; right:-9px; top:0; color:#aee9ce; font-size:7px; font-style:normal; }
+.shared-game-nav { display:flex; align-items:center; gap:28px; height:100%; font-size:13px; font-weight:500; }
+.shared-game-nav a { position:relative; display:flex; align-items:center; gap:7px; height:100%; color:#d3dfff; text-decoration:none; white-space:nowrap; }
+.shared-game-nav a.active { color:#fff; font-weight:700; }
+.shared-game-nav a.active::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:#b8f2d6; }
+.shared-header .theme-switch { margin-left:auto; }
+.shared-header :is(a,button):focus-visible { outline:3px solid #e9b950; outline-offset:3px; }
+@media(max-width:900px) {
+  .shared-header-inner { gap:28px; }
+  .shared-game-nav { gap:18px; font-size:11px; }
+}
+@media(max-width:600px) {
+  :root { --header-height:104px; }
+  .shared-header-inner { padding:10px 16px 0; flex-wrap:wrap; gap:8px 18px; align-content:space-between; }
+  .shared-wordmark { font-size:25px; }
+  .shared-game-nav { order:3; width:100%; height:42px; justify-content:center; gap:24px; flex-shrink:0; font-size:10px; }
+  .shared-header .theme-switch { width:auto; flex-wrap:nowrap; }
+}

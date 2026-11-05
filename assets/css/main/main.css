@@ -1,0 +1,97 @@
+/* 메인 게임 선택 영상과 전환 효과 스타일. 파일 설명: docs/files/css/main.css.md */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+@property --split { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+:root { --blue:#4169e1; --blue-dark:#3458ca; --mint:#239a86; --text:#28334a; --muted:#8993a5; --line:#e8ebf1; --bg:#f4f6f9; --header-height:65px; }
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html,body { height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI','Malgun Gothic',sans-serif; font-size:14px; line-height:1.5; }
+a { color:inherit; text-decoration:none; }
+button,input,select { font:inherit; }
+button,a,select { -webkit-tap-highlight-color:transparent; }
+button { cursor:pointer; }
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible { outline:3px solid #e9b950; outline-offset:4px; }
+
+/* TFT 화면과 메뉴 구성 및 색상을 맞춥니다. */
+.home-header { position:relative; z-index:10; background:var(--blue); color:white; }
+.home-header-inner { max-width:1240px; height:var(--header-height); margin:auto; padding:0 24px; display:flex; align-items:center; gap:56px; }
+.home-wordmark { position:relative; display:inline-flex; align-items:baseline; font-size:30px; font-weight:900; letter-spacing:-1.7px; line-height:1; }
+.home-wordmark span { font-weight:650; }
+.home-wordmark i { position:absolute; right:-9px; top:0; color:#aee9ce; font-size:7px; }
+.home-nav { display:flex; height:100%; gap:28px; font-size:13px; }
+.home-nav a { position:relative; display:flex; align-items:center; color:#d3dfff; white-space:nowrap; }
+.home-nav a.active { color:white; font-weight:700; }
+.home-nav a.active::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:#b8f2d6; }
+.home-language { margin-left:auto; font-size:12px; }
+
+/* 게임 제목을 영상 위에 직접 겹쳐 표시합니다. */
+.stage { --split:50%; position:fixed; inset:var(--header-height) 0 0; background:#111d2d; opacity:0; transition:--split .65s cubic-bezier(.2,.7,.2,1),opacity .4s ease; }
+.stage.ready { opacity:1; }
+.stage[data-state="lol"] { --split:62%; }
+.stage[data-state="tft"] { --split:38%; }
+.stage[data-state="go-lol"] { --split:130%; }
+.stage[data-state="go-tft"] { --split:-30%; }
+.panel { position:absolute; inset:0; z-index:2; overflow:hidden; background:transparent; cursor:pointer; }
+.panel.lol { clip-path:polygon(0 0,calc(var(--split) + 10%) 0,calc(var(--split) - 10%) 100%,0 100%); }
+.panel.tft { clip-path:polygon(calc(var(--split) + 10%) 0,100% 0,100% 100%,calc(var(--split) - 10%) 100%); }
+.media { position:absolute; inset:-5%; transition:transform .65s ease,filter .4s ease; filter:brightness(.85); will-change:transform; }
+.media video { width:100%; height:100%; display:block; object-fit:cover; object-position:center; }
+/* LoL 영상 자체의 상하 여백을 scale로 잘라냅니다. JavaScript의 translate와
+   별도로 적용해 시차 이동 중에도 확대 상태가 유지되도록 합니다. */
+.lol .media video { scale:1.3; transform-origin:center; }
+.cinematic.no-video video { display:none; }
+.shade { position:absolute; inset:0; background:linear-gradient(180deg,rgba(5,7,11,.35),rgba(5,7,11,.1) 40%,rgba(5,7,11,.7)); pointer-events:none; }
+.copy { position:absolute; top:50%; transform:translateY(-50%); color:#eef1f6; pointer-events:none; transition:transform .4s ease,opacity .4s ease; }
+.lol .copy { left:7%; }
+.tft .copy { right:7%; text-align:right; }
+.copy h2 { font:700 clamp(2.2rem,5.6vw,5.6rem)/.95 'Oswald',sans-serif; letter-spacing:.02em; text-shadow:0 4px 30px rgba(0,0,0,.6); }
+.copy p { margin-top:1.2rem; color:#b7c0d1; font-size:.85rem; line-height:1.7; letter-spacing:.08em; }
+.stage[data-state="lol"] .lol .media,.stage[data-state="tft"] .tft .media { transform:scale(1.04); filter:brightness(1); }
+.stage[data-state="lol"] .lol .copy,.stage[data-state="tft"] .tft .copy { transform:translateY(-50%) translateY(-5px); }
+.stage[data-state="lol"] .tft .media,.stage[data-state="tft"] .lol .media { filter:brightness(.65); }
+.panel:focus-visible .copy { outline:3px solid #e9b950; outline-offset:4px; }
+.stage.go .copy { opacity:0; }
+.fade { position:absolute; inset:0; z-index:25; background:var(--bg); opacity:0; pointer-events:none; transition:opacity .35s ease; }
+.fade.on { opacity:1; }
+
+@media(max-width:768px) {
+  :root { --header-height:58px; }
+  .home-header-inner { padding:0 18px; gap:28px; }
+  .home-wordmark { font-size:26px; }
+  .home-nav { gap:18px; font-size:11px; }
+  .home-language { display:none; }
+  .panel.lol { clip-path:polygon(0 0,100% 0,100% calc(var(--split) - 4%),0 calc(var(--split) + 4%)); }
+  .panel.tft { clip-path:polygon(0 calc(var(--split) + 4%),100% calc(var(--split) - 4%),100% 100%,0 100%); }
+  .stage[data-state="lol"],.stage[data-state="tft"] { --split:50%; }
+  .stage[data-state="go-lol"] { --split:130%; }
+  .stage[data-state="go-tft"] { --split:-30%; }
+  .lol .copy,.tft .copy { left:8%; right:8%; text-align:left; }
+  .lol .copy { top:25%; }
+  .tft .copy { top:75%; }
+  .copy h2 { font-size:clamp(2rem,9vw,3.4rem); }
+  .copy p { margin-top:8px; font-size:11px; }
+}
+@media(max-width:430px) {
+  .home-header-inner { gap:20px; padding:0 14px; }
+  .home-nav { gap:12px; font-size:10px; }
+  .home-wordmark { font-size:23px; }
+}
+@media(max-height:640px) and (max-width:768px) {
+  .copy p { display:none; }
+  .copy h2 { font-size:28px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .stage,.media,.copy,.fade { transition-duration:.01s; }
+}
+
+/* 클릭 영역과 제목의 경계는 유지하고 영상 레이어에만 부드러운 경계 효과를 적용합니다. */
+.video-layers { position:absolute; inset:0; overflow:hidden; pointer-events:none;
+  mask-image:linear-gradient(to right,transparent,#000 24px,#000 calc(100% - 24px),transparent),linear-gradient(to bottom,transparent,#000 32px,#000 calc(100% - 32px),transparent);
+  mask-composite:intersect;
+}
+.cinematic { position:absolute; inset:0; overflow:hidden; background:#657c9b; }
+.cinematic.tft { --seam-stop:calc((var(--split) + 10%) / 1.2);
+  mask-image:linear-gradient(var(--seam-angle,105deg),transparent calc(var(--seam-stop) - 28px),#000 calc(var(--seam-stop) + 28px));
+}
+@media(max-width:768px) {
+  .cinematic.tft { --seam-stop:calc((var(--split) + 4%) / 1.08); }
+  .video-layers { mask-image:linear-gradient(to right,transparent,#000 14px,#000 calc(100% - 14px),transparent),linear-gradient(to bottom,transparent,#000 22px,#000 calc(100% - 22px),transparent); }
+}

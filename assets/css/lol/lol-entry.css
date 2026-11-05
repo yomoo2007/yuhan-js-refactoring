@@ -1,0 +1,18 @@
+/* LoL 진입 화면 검색 폼 스타일. 파일 설명: docs/files/css/lol-entry.css.md */
+.lol-search-panel { box-sizing:border-box; max-width:1080px; margin:24px auto; padding:28px; background:#fff; border:1px solid #e8ebf1; border-radius:10px; color:#28334a; }
+.lol-search-panel h1 { font-size:24px; font-weight:700; margin-bottom:22px; }
+.lol-search-form { display:flex; align-items:center; gap:10px; }
+.lol-search-form label { font-size:12px; }
+.lol-search-form input,.lol-search-form select { box-sizing:border-box; min-height:44px; padding:10px 12px; border:1px solid #dfe6f0; border-radius:6px; background:#f7f9fc; color:#28334a; font:inherit; }
+.lol-search-form input { flex:1; min-width:0; }
+.lol-search-form button { min-height:44px; padding:10px 20px; border:0; border-radius:6px; background:#4169e1; color:white; font:inherit; cursor:pointer; }
+.lol-search-panel p { font-size:12px; color:#7c8ca3; margin-top:14px; }
+.content-header[hidden] { display:none; }
+@media(max-width:600px) {
+  .lol-search-panel { margin:16px; padding:20px; }
+  .lol-search-panel h1 { font-size:20px; }
+  .lol-search-form { flex-wrap:wrap; }
+  .lol-search-form input { flex-basis:60%; }
+  .lol-search-form label { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+  .lol-search-form button { width:100%; }
+}

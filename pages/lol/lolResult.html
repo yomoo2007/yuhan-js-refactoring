@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../../">
+  <title>협곡의 산책자 · LOL 전적 | PORO.GG</title>
+  <link rel="stylesheet" href="./assets/css/common/common.css">
+  <link rel="stylesheet" href="./assets/css/common/layouts.css">
+  <link rel="stylesheet" href="./assets/css/common/theme.css">
+  <link rel="stylesheet" href="./assets/css/common/header.css">
+  <link rel="stylesheet" href="./assets/css/tft/tft.css">
+  <link rel="stylesheet" href="./assets/css/tft/tft-loading.css">
+  <link rel="stylesheet" href="./assets/css/lol/lolResult.css">
+  <link rel="preload" as="image" href="./assets/images/tft/loading/teemo-throw-five.png">
+  <link rel="preload" as="image" href="./assets/images/tft/loading/mushroom-green.png">
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 이동</a>
+  <header id="site-header" class="shared-header" data-page="lol"></header>
+
+  <div class="sub-header">
+    <div class="sub-inner">
+      <div class="section-name">LOL<span>전적검색</span></div>
+      <form class="search-form" id="lol-search" role="search">
+        <label class="sr-only" for="lol-region">서버</label>
+        <select id="lol-region">
+          <option value="KR">KR</option>
+          <option value="JP">JP</option>
+          <option value="NA">NA</option>
+          <option value="EUW">EUW</option>
+        </select>
+        <span class="search-divider"></span>
+        <label class="sr-only" for="riot-id">Riot ID</label>
+        <input id="lol-riot-id" type="search" placeholder="플레이어 이름 + #태그" autocomplete="off" maxlength="60" required>
+        <button type="submit" aria-label="전적 검색">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="10.5" cy="10.5" r="6.5"/>
+            <path d="m16 16 5 5"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <main id="main" class="container">
+    <p id="search-message" class="search-message" role="alert"></p>
+
+    <div class="breadcrumb">
+      <span>리그 오브 레전드</span>
+      <span> / </span>
+      <strong>플레이어 전적</strong>
+      <span class="demo-badge">
+        <i></i> SAMPLE DATA
+      </span>
+    </div>
+
+    <!-- 소환사 프로필 영역 -->
+    <section class="profile-panel" aria-labelledby="player-name">
+      <div class="profile-main">
+        <div class="avatar-wrap">
+          <img class="profile-avatar" src="./assets/images/tft/profiles/profile-29.jpg" alt="샘플 플레이어의 Riot 프로필 아이콘">
+          <span class="avatar-level">128</span>
+        </div>
+        <div class="player-copy">
+          <div class="player-eyebrow">
+            <span id="player-region">KR</span>
+            오늘도 한 판, 즐거운 협곡 산책.
+          </div>
+          <div class="player-title">
+            <h1 id="player-name">협곡의 산책자</h1>
+            <span id="player-tag">#DEMO</span>
+            <button id="favorite" class="favorite" aria-label="즐겨찾기 추가" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2.5 15 8.8 22 9.7 17 14.6 18.2 21.5 12 18.2 5.8 21.5 7 14.6 2 9.7 9 8.8Z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="previous-rank">
+            <span>시즌 최고 <b>DIAMOND II</b></span>
+            <span class="profile-dot">·</span>
+            <span>티모 정찰대</span>
+          </div>
+          <div class="profile-actions">
+            <button id="refresh" class="primary-button">
+              <span aria-hidden="true">↻</span> 전적 갱신
+            </button>
+            <button id="preview-loading" class="preview-loading">로딩 미리보기</button>
+            <button class="preview-loading" data-preview-feedback="error">실패 화면</button>
+            <button class="preview-loading" data-preview-feedback="not-found">유저 없음</button>
+            <button id="sample-profile" class="preview-loading">샘플 보기</button>
+            <span id="updated">예시 플레이어의 전적입니다</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="page-tabs">
+      <a class="selected" href="#match-history">종합 전적</a>
+    </div>
+
+    <!-- 메인 대시보드 (좌: 랭크 / 우: 요약 + 전적 리스트) -->
+    <div class="dashboard lol-dashboard">
+      <!-- 좌측 사이드바: 랭크 정보 -->
+      <aside class="sidebar lol-sidebar">
+
+        <section class="panel rank-panel">
+          <div class="panel-heading">
+            <h2>랭크</h2>
+          </div>
+          <div class="rank-summary">
+            <div class="rank-emblem">
+              <img src="./assets/images/tft/ranks/rank-diamond.png" alt="랭크 문양">
+            </div>
+            <div>
+              <p class="rank-label">EMERALD I</p>
+              <p class="rank-points">45 <span>LP</span></p>
+              <p class="rank-total">24승 18패 (총 42게임)</p>
+            </div>
+          </div>
+          <div class="rank-footer">
+            <span>승률 <strong>57.1%</strong></span>
+            <span>시즌 전체 기록</span>
+          </div>
+        </section>
+      </aside>
+
+      <!-- 우측 본문 컬럼 -->
+      <section class="history-column lol-history-column" id="match-history" aria-labelledby="history-title">
+
+        <!-- 1. 최근 20게임 요약 패널 (기존 PORO.GG 패널 디자인 + 요청 요소 3가지) -->
+        <section class="panel lol-summary-panel" aria-labelledby="summary-title">
+          <div class="lol-summary-header">
+            <div class="lol-summary-title-group">
+              <h2 id="summary-title">최근 20게임 요약</h2>
+            </div>
+          </div>
+
+          <div class="lol-summary-grid">
+            <!-- 영역 1: 최근 20게임 전적 -->
+            <div class="lol-summary-box">
+              <div class="lol-box-head">
+                <h3>최근 20게임 전적</h3>
+                <span class="lol-record-badge">20전 8승 12패</span>
+              </div>
+              <div class="lol-winrate-wrap">
+                <div class="lol-donut" style="--win-deg: 144deg;" role="img" aria-label="승률 40%">
+                  <div class="lol-donut-inner">
+                    <strong>40%</strong>
+                    <span>승률</span>
+                  </div>
+                </div>
+                <div class="lol-kda-overview">
+                  <p class="lol-kda-avg">
+                    <span>5.8</span> / <span class="is-death">6.3</span> / <span>8.0</span>
+                  </p>
+                  <p class="lol-kda-score">2.19 : 1 <span>평점</span></p>
+                  <p class="lol-kp-text">킬관여율 <strong>48%</strong></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 영역 2: 플레이한 챔피언 TOP 3 -->
+            <div class="lol-summary-box">
+              <div class="lol-box-head">
+                <h3>플레이한 챔피언 TOP 3</h3>
+                <span class="subtle">최근 20게임</span>
+              </div>
+              <ul class="lol-top-champs">
+                <li>
+                  <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Ambessa.png" alt="암베사">
+                  <div class="lol-champ-info">
+                    <strong>암베사</strong>
+                    <span><b class="is-high">100%</b> (3승 0패)</span>
+                  </div>
+                  <span class="lol-champ-kda is-blue">4.69:1 평점</span>
+                </li>
+                <li>
+                  <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Pantheon.png" alt="판테온">
+                  <div class="lol-champ-info">
+                    <strong>판테온</strong>
+                    <span><b>33%</b> (1승 2패)</span>
+                  </div>
+                  <span class="lol-champ-kda">1.54:1 평점</span>
+                </li>
+                <li>
+                  <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Bard.png" alt="바드">
+                  <div class="lol-champ-info">
+                    <strong>바드</strong>
+                    <span><b>50%</b> (1승 1패)</span>
+                  </div>
+                  <span class="lol-champ-kda">1.85:1 평점</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- 영역 3: 선호 포지션 -->
+            <div class="lol-summary-box">
+              <div class="lol-box-head">
+                <h3>선호 포지션</h3>
+                <span class="subtle">랭크 기준</span>
+              </div>
+              <ul class="lol-pos-chart" aria-label="포지션별 선호 비율">
+                <li>
+                  <span class="lol-pos-pct">40%</span>
+                  <div class="lol-pos-bar"><i style="height: 40%"></i></div>
+                  <span class="lol-pos-name">탑</span>
+                </li>
+                <li>
+                  <span class="lol-pos-pct">5%</span>
+                  <div class="lol-pos-bar"><i style="height: 5%"></i></div>
+                  <span class="lol-pos-name">정글</span>
+                </li>
+                <li class="is-main">
+                  <span class="lol-pos-pct">45%</span>
+                  <div class="lol-pos-bar"><i style="height: 45%"></i></div>
+                  <span class="lol-pos-name">미드</span>
+                </li>
+                <li>
+                  <span class="lol-pos-pct">5%</span>
+                  <div class="lol-pos-bar"><i style="height: 5%"></i></div>
+                  <span class="lol-pos-name">원딜</span>
+                </li>
+                <li>
+                  <span class="lol-pos-pct">12%</span>
+                  <div class="lol-pos-bar"><i style="height: 12%"></i></div>
+                  <span class="lol-pos-name">서폿</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. 매치 히스토리 상단 헤더 -->
+        <div class="lol-section-bar">
+          <h2 id="history-title">매치 히스토리 <span class="lol-count-pill">20</span></h2>
+          <div class="lol-legend">
+            <span><i class="dot-win"></i> 승리</span>
+            <span><i class="dot-loss"></i> 패배</span>
+          </div>
+        </div>
+
+        <!-- 3. 매치 히스토리 리스트 -->
+        <div class="lol-match-list" id="lol-match-list">
+
+          <!-- 매치 1: 승리 (암베사) -->
+          <article class="panel lol-match-card is-win">
+            <div class="lol-match-info">
+              <span class="lol-queue-type">솔로 랭크</span>
+              <span class="lol-time-ago">2시간 전</span>
+              <span class="lol-bar-divider"></span>
+              <strong class="lol-result-label">승리</strong>
+              <span class="lol-game-length">28분 14초</span>
+            </div>
+
+            <div class="lol-match-ChampKda">
+              <div class="lol-champ-portrait">
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Ambessa.png" alt="암베사">
+                <span class="lol-champ-lv">17</span>
+              </div>
+              <div class="lol-spells-runes">
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/SummonerFlash.png" alt="점멸" title="점멸">
+                <span class="lol-rune-icon" title="정복자">⚔️</span>
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/SummonerTeleport.png" alt="순간이동" title="순간이동">
+                <span class="lol-rune-icon is-sub" title="결의">🛡️</span>
+              </div>
+              <div class="lol-kda-detail">
+                <p class="lol-kda-line">
+                  <span>9</span> / <span class="is-death">2</span> / <span>8</span>
+                </p>
+                <p class="lol-kda-ratio"><strong>8.50:1</strong> 평점</p>
+                <div class="lol-tags">
+                  <span class="lol-tag is-red">더블킬</span>
+                  <span class="lol-tag is-gold">MVP</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="lol-match-metrics">
+              <p class="lol-kp">킬관여 <strong>61%</strong></p>
+              <p>제어 와드 3</p>
+              <p>CS 242 (8.6)</p>
+              <p class="lol-avg-tier">Diamond II</p>
+            </div>
+
+            <div class="lol-match-items">
+              <ul class="lol-item-grid" aria-label="아이템 빌드">
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/6692.png" alt="월식"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3071.png" alt="칠흑의 양날 도끼"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3047.png" alt="판금 장화"></li>
+                <li class="is-trinket"><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3364.png" alt="예언자의 렌즈"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/6333.png" alt="죽음의 무도"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3053.png" alt="스테락의 도전"></li>
+                <li class="is-empty"></li>
+              </ul>
+            </div>
+
+            <div class="lol-match-rosters">
+              <ul>
+                <li class="is-me"><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Ambessa.png" alt=""><span>협곡의 산책자</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/LeeSin.png" alt=""><span>정글차이납니다</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Ahri.png" alt=""><span>미드오픈안함</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Jinx.png" alt=""><span>바텀듀오구함</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Thresh.png" alt=""><span>랜턴좀타세요</span></li>
+              </ul>
+              <ul>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/KSante.png" alt=""><span>탑신병자</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Viego.png" alt=""><span>망령의검</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Sylas.png" alt=""><span>궁극기강탈자</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Kaisa.png" alt=""><span>공허의딸</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Nautilus.png" alt=""><span>닻줄견인</span></li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- 매치 2: 패배 (판테온) -->
+          <article class="panel lol-match-card is-loss">
+            <div class="lol-match-info">
+              <span class="lol-queue-type">솔로 랭크</span>
+              <span class="lol-time-ago">5시간 전</span>
+              <span class="lol-bar-divider"></span>
+              <strong class="lol-result-label">패배</strong>
+              <span class="lol-game-length">31분 42초</span>
+            </div>
+
+            <div class="lol-match-ChampKda">
+              <div class="lol-champ-portrait">
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Pantheon.png" alt="판테온">
+                <span class="lol-champ-lv">16</span>
+              </div>
+              <div class="lol-spells-runes">
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/SummonerFlash.png" alt="점멸" title="점멸">
+                <span class="lol-rune-icon" title="집중 공격">🎯</span>
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/SummonerDot.png" alt="점화" title="점화">
+                <span class="lol-rune-icon is-sub" title="영감">✨</span>
+              </div>
+              <div class="lol-kda-detail">
+                <p class="lol-kda-line">
+                  <span>4</span> / <span class="is-death">8</span> / <span>7</span>
+                </p>
+                <p class="lol-kda-ratio"><strong>1.38:1</strong> 평점</p>
+                <div class="lol-tags">
+                  <span class="lol-tag is-purple">ACE</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="lol-match-metrics">
+              <p class="lol-kp">킬관여 <strong>44%</strong></p>
+              <p>제어 와드 5</p>
+              <p>CS 210 (6.6)</p>
+              <p class="lol-avg-tier">Diamond II</p>
+            </div>
+
+            <div class="lol-match-items">
+              <ul class="lol-item-grid" aria-label="아이템 빌드">
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3142.png" alt="요우무의 유령검"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/6692.png" alt="월식"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3111.png" alt="헤르메스의 발걸음"></li>
+                <li class="is-trinket"><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3364.png" alt="예언자의 렌즈"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3814.png" alt="밤의 끝자락"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3036.png" alt="도미닉 경의 인사"></li>
+                <li class="is-empty"></li>
+              </ul>
+            </div>
+
+            <div class="lol-match-rosters">
+              <ul>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Aatrox.png" alt=""><span>세계의종결자</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Graves.png" alt=""><span>무법자그브</span></li>
+                <li class="is-me"><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Pantheon.png" alt=""><span>협곡의 산책자</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Ezreal.png" alt=""><span>비전이동앞으로</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Karma.png" alt=""><span>만트라실드</span></li>
+              </ul>
+              <ul>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Renekton.png" alt=""><span>사막의도살자</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Nidalee.png" alt=""><span>창맞으면사망</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Orianna.png" alt=""><span>충격파대기중</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Caitlyn.png" alt=""><span>필트오버보안관</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Lux.png" alt=""><span>데마시아빛</span></li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- 매치 3: 승리 (바드) -->
+          <article class="panel lol-match-card is-win">
+            <div class="lol-match-info">
+              <span class="lol-queue-type">솔로 랭크</span>
+              <span class="lol-time-ago">1일 전</span>
+              <span class="lol-bar-divider"></span>
+              <strong class="lol-result-label">승리</strong>
+              <span class="lol-game-length">24분 50초</span>
+            </div>
+
+            <div class="lol-match-ChampKda">
+              <div class="lol-champ-portrait">
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Bard.png" alt="바드">
+                <span class="lol-champ-lv">14</span>
+              </div>
+              <div class="lol-spells-runes">
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/SummonerFlash.png" alt="점멸" title="점멸">
+                <span class="lol-rune-icon" title="수호자">🔰</span>
+                <img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/spell/SummonerDot.png" alt="점화" title="점화">
+                <span class="lol-rune-icon is-sub" title="지배">👁️</span>
+              </div>
+              <div class="lol-kda-detail">
+                <p class="lol-kda-line">
+                  <span>2</span> / <span class="is-death">3</span> / <span>19</span>
+                </p>
+                <p class="lol-kda-ratio"><strong>7.00:1</strong> 평점</p>
+                <div class="lol-tags">
+                  <span class="lol-tag is-blue">시야장악</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="lol-match-metrics">
+              <p class="lol-kp">킬관여 <strong>72%</strong></p>
+              <p>제어 와드 11</p>
+              <p>CS 38 (1.5)</p>
+              <p class="lol-avg-tier">Diamond II</p>
+            </div>
+
+            <div class="lol-match-items">
+              <ul class="lol-item-grid" aria-label="아이템 빌드">
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3870.png" alt="세계 지도집"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3190.png" alt="강철의 솔라리 펜던트"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3009.png" alt="신속의 장화"></li>
+                <li class="is-trinket"><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3364.png" alt="예언자의 렌즈"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3107.png" alt="구원"></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/item/3110.png" alt="얼어붙은 심장"></li>
+                <li class="is-empty"></li>
+              </ul>
+            </div>
+
+            <div class="lol-match-rosters">
+              <ul>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Gnar.png" alt=""><span>메가나르대기</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/XinZhao.png" alt=""><span>데마시아창</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Yone.png" alt=""><span>영혼해방</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Jhin.png" alt=""><span>커튼콜네발</span></li>
+                <li class="is-me"><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Bard.png" alt=""><span>협곡의 산책자</span></li>
+              </ul>
+              <ul>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Camille.png" alt=""><span>마법공학최후통첩</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Sejuani.png" alt=""><span>혹한의서리</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Viktor.png" alt=""><span>영광스러운진화</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Lucian.png" alt=""><span>빛의사도</span></li>
+                <li><img src="https://ddragon.leagueoflegends.com/cdn/14.23.1/img/champion/Nami.png" alt=""><span>파도소환사</span></li>
+              </ul>
+            </div>
+          </article>
+
+        </div>
+
+        <button id="load-more" class="load-more">전적 더 보기 <span>⌵</span></button>
+        <p class="demo-disclaimer">이 화면의 플레이어·전적·통계는 UI 확인을 위한 예시 데이터입니다.</p>
+      </section>
+    </div>
+
+    <footer id="footer" class="site-footer"></footer>
+  </main>
+
+  <!-- 공통 로딩창 -->
+  <dialog id="loading-dialog" class="loading-dialog" aria-labelledby="loading-title" aria-describedby="loading-description">
+    <button id="loading-close" class="loading-close" aria-label="로딩 취소">×</button>
+    <div class="loader-kicker">TEEMO'S SCOUTING REPORT</div>
+    <div id="loader-stage" class="loader-stage" role="img" aria-label="티모 로딩 애니메이션">
+      <canvas class="teemo-sprite" width="560" height="512" aria-hidden="true"></canvas>
+      <img class="planted-mushroom mushroom-one" src="./assets/images/tft/loading/mushroom-green.png" alt="">
+      <img class="planted-mushroom mushroom-two" src="./assets/images/tft/loading/mushroom-green.png" alt="">
+      <img class="planted-mushroom mushroom-three" src="./assets/images/tft/loading/mushroom-green.png" alt="">
+      <img class="flying-mushroom" src="./assets/images/tft/loading/mushroom-green.png" alt="">
+      <span class="bounce-ring ring-one" aria-hidden="true"></span>
+      <span class="bounce-ring ring-two" aria-hidden="true"></span>
+      <span class="bounce-ring ring-three" aria-hidden="true"></span>
+      <span class="loader-ground" aria-hidden="true"></span>
+    </div>
+    <h2 id="loading-title">전적을 정찰하고 있어요</h2>
+    <p id="loading-description">하나, 둘, 통통! 티모가 기록을 가져오는 중이에요.</p>
+    <div class="loader-status" role="status"><span></span><span></span><span></span><small>잠시만 기다려 주세요</small></div>
+    <p class="loader-demo-note">프로토타입 로딩 미리보기</p>
+  </dialog>
+
+  <!-- Script Start -->
+  <script src="./assets/js/shared/assets.js" defer></script>
+  <script src="./assets/js/shared/theme.js"></script>
+  <script src="./assets/js/shared/header.js"></script>
+  <script src="./assets/js/shared/footer.js"></script>
+  <script src="./assets/js/lol/riot-public.js"></script>
+  <script src="./assets/js/lol/lolFetch.js"></script>
+  <script src="./assets/js/shared/loading.js"></script>
+  <script src="./assets/js/lol/lolIndex.js"></script>
+  <!-- Script End -->
+</body>
+</html>
