@@ -4,47 +4,47 @@
   "use strict";
   // LoL과 같은 개인 서버에 TFT 요청을 전달합니다.
   async function tftFetch(path, { region = "KR", signal } = {}) {
-      const regionData = REGIONDATA[region.toUpperCase()];
-      if (!regionData) throw new Error("지원하지 않는 지역입니다.");
-      const regional = path.startsWith("/riot/account/") || path.startsWith("/tft/match/");
-      const response = await fetch(`http://prestigelulu.com:3000${path}`, {
-        signal,
-        headers: {
-          "X-Riot-Token": API_KEYS.tft,
-          region: regional ? regionData.regional : regionData.platform,
-        },
-      });
-      let data;
+    const regionData = REGIONDATA[region.toUpperCase()];
+    if (!regionData) throw new Error("지원하지 않는 지역입니다.");
+    const regional = path.startsWith("/riot/account/") || path.startsWith("/tft/match/");
+    const response = await fetch(`http://prestigelulu.com:3000${path}`, {
+      signal,
+      headers: {
+        "X-Riot-Token": API_KEYS.tft,
+        region: regional ? regionData.regional : regionData.platform,
+      },
+    });
+    let data;
 
-      try {
-        data = await response.json();
-      } catch (error) {
-        // 응답을 읽다가 취소된 경우에도 취소 오류를 그대로 전달
-        signal?.throwIfAborted();
+    try {
+      data = await response.json();
+    } catch (error) {
+      // 응답을 읽다가 취소된 경우에도 취소 오류를 그대로 전달
+      signal?.throwIfAborted();
 
-        if (error.name === "AbortError") throw error;
+      if (error.name === "AbortError") throw error;
 
-        throw new Error(
-          "실제 전적 검색은 프로젝트의 start-local.bat 파일로 실행한 사이트에서 사용할 수 있습니다.",
-        );
-      }
+      throw new Error(
+        "실제 전적 검색은 프로젝트의 start-local.bat 파일로 실행한 사이트에서 사용할 수 있습니다.",
+      );
+    }
 
-      // 서버가 보낸 상태 코드와 재시도 시간을 오류에 담아 전달
-      if (!response.ok) {
-        const error = new Error(data.message || "전적을 가져오지 못했습니다.");
+    // 서버가 보낸 상태 코드와 재시도 시간을 오류에 담아 전달
+    if (!response.ok) {
+      const error = new Error(data.message || "전적을 가져오지 못했습니다.");
 
-        error.status = response.status;
-        error.retryAfter = Number(data.retryAfter) || 1;
-        error.kind =
-          response.status === 404 &&
+      error.status = response.status;
+      error.retryAfter = Number(data.retryAfter) || 1;
+      error.kind =
+        response.status === 404 &&
           /^\/(riot\/account|tft\/summoner)\//.test(path)
-            ? "not-found"
-            : "error";
+          ? "not-found"
+          : "error";
 
-        throw error;
-      }
+      throw error;
+    }
 
-      return data;
+    return data;
   }
 
   // 매치 상세는 4개씩 조회하고 실패한 매치 ID는 따로 보관
@@ -156,7 +156,7 @@
     failedMatchIds = [],
     options = {},
     signal,
-    onPage = () => {},
+    onPage = () => { },
   }) {
     const request = (path) => tftFetch(path, options);
     let nextStart = start;

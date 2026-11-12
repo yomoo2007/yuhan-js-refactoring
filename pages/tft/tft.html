@@ -55,7 +55,7 @@
       <span> / </span>
       <strong>플레이어 전적</strong>
       <span class="demo-badge">
-        <i></i> SAMPLE DATA
+        <i></i> RIOT DATA
       </span>
     </div>
     <section class="profile-panel" aria-labelledby="player-name">
@@ -87,9 +87,6 @@
             <button id="refresh" class="primary-button">
               <span aria-hidden="true">↻</span> 전적 갱신
             </button>
-            <button id="preview-loading" class="preview-loading">로딩 미리보기</button>
-            <button class="preview-loading" data-preview-feedback="error">실패 화면</button>
-            <button class="preview-loading" data-preview-feedback="not-found">유저 없음</button>
             <span id="updated">예시 플레이어의 전적입니다</span>
           </div>
         </div>
@@ -188,57 +185,6 @@
             </div>
           </div>
         </section>
-        <section class="panel usage-panel" aria-labelledby="usage-title">
-          <div class="usage-heading">
-            <div>
-              <h2 id="usage-title">자주 사용한 챔피언 &amp; 시너지</h2>
-              <p id="usage-sample"></p>
-            </div>
-            <label>
-              <span class="sr-only">통계 집계 게임 수</span>
-              <select id="stats-limit">
-                <option value="10">최근 10게임</option>
-                <option value="20" selected>최근 20게임</option>
-                <option value="50">최근 50게임</option>
-              </select>
-            </label>
-          </div>
-          <div class="usage-tables">
-            <div>
-              <h3>챔피언 통계</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>챔피언</th>
-                    <th>사용</th>
-                    <th>평균 등수</th>
-                    <th>TOP 4</th>
-                  </tr>
-                </thead>
-                <tbody id="champion-usage">
-
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <h3>활성 시너지 통계</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>시너지</th>
-                    <th>사용</th>
-                    <th>평균 등수</th>
-                    <th>TOP 4</th>
-                  </tr>
-                </thead>
-                <tbody id="trait-usage">
-
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <button id="usage-expand" class="usage-expand">전체 챔피언·시너지 통계 보기 ↓</button>
-        </section>
         <div class="history-heading">
           <h2 id="history-title">매치 히스토리 <span id="match-count">20</span></h2>
           <span class="history-key">
@@ -324,11 +270,9 @@
   <script src="./assets/data/tft/tft-set17-data.js" defer></script>
   <script src="./assets/js/tft/tft-model.js" defer></script>
   <script src="./assets/js/tft/tft-rank.js" defer></script>
-  <script src="./assets/js/tft/tft-store.js" defer></script>
   <script src="./assets/js/lol/riot-public.js" defer></script>
   <script src="./assets/js/tft/tft-api.js" defer></script>
   <script src="./assets/js/tft/tft-traits.js" defer></script>
-  <script src="./assets/js/tft/tft-rank-ui.js" defer></script>
   <script src="./assets/js/shared/loading.js" defer></script>
   <script src="./assets/js/tft/tft-feedback.js" defer></script>
   <script src="./assets/js/tft/tft.js" defer></script>

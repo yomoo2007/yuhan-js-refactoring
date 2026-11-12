@@ -10,9 +10,9 @@
 [data-theme="dark"] .profile-panel { background:linear-gradient(105deg,#202b3c 48%,#213737); border-color:var(--line); }
 [data-theme="dark"] :is(.search-form,.portrait-switch,.match-detail,.usage-tables th,#main-search input,#main-search select) { background:#182231; color:#c5d3e8; border-color:var(--line); }
 [data-theme="dark"] :is(.preview-loading,.portrait-switch button.active) { background:#2a3951; color:#c7d8ff; border-color:var(--line); }
-[data-theme="dark"] :is(.player-title h1,.rank-points,.summary-metrics strong,.usage-name,.usage-tables td,.equipped-champion,.feedback-dialog h2,.loading-dialog h2) { color:var(--text); }
+[data-theme="dark"] :is(.player-title h1,.rank-points,.summary-metrics strong,.feedback-dialog h2,.loading-dialog h2) { color:var(--text); }
 [data-theme="dark"] :is(.usage-tables h3,.record-header,.roster-player,.record-comp,.season-note,.player-eyebrow,.previous-rank,.rank-total,.summary-metrics span,.summary-caption,.rank-chart-summary,.rank-footer,.rank-progress,.usage-heading p,.synergy-group small,.profile-actions > span) { color:#a8b7d0; }
-[data-theme="dark"] :is(.record-header,.rank-footer,.overview-heading,.page-tabs,.filter-bar,.usage-tables td,.equipped-unit,.site-footer) { border-color:var(--line); }
+[data-theme="dark"] :is(.record-header,.rank-footer,.overview-heading,.page-tabs,.filter-bar,.site-footer) { border-color:var(--line); }
 [data-theme="dark"] .rank-axis-label { fill:#b4c5df; }
 [data-theme="dark"] .rank-grid-line { stroke:#34465f; }
 [data-theme="dark"] :is(.loading-dialog,.feedback-dialog,#search-dialog)::backdrop { background:#08101db3; }

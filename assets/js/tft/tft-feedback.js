@@ -6,7 +6,6 @@
   const action = document.getElementById("feedback-action");
   let retryRequest,
     notFound = false,
-    preview = false,
     previousFocus;
 
   function close() {
@@ -14,9 +13,8 @@
   }
 
   // 유저를 못 찾았으면 검색어 수정 안내, 그 외에는 오류 안내
-  function show(error, { retry, preview: isPreview = false } = {}) {
+  function show(error, { retry } = {}) {
     notFound = error.kind === "not-found";
-    preview = isPreview;
     retryRequest = retry;
     previousFocus = document.activeElement;
 
@@ -38,14 +36,10 @@
 
     const detail = document.getElementById("feedback-detail");
 
-    detail.textContent = preview
-      ? "화면 미리보기 · 실제 검색 결과가 아닙니다."
-      : error.message || "";
+    detail.textContent = error.message || "";
 
     detail.hidden = !detail.textContent;
-    action.textContent = preview
-      ? "미리보기 닫기"
-      : notFound
+    action.textContent = notFound
         ? "검색어 수정"
         : retry
           ? "다시 시도"
@@ -57,8 +51,8 @@
 
   action.addEventListener("click", () => {
     const retry = retryRequest,
-      edit = notFound && !preview,
-      shouldRetry = !notFound && !preview && retry;
+      edit = notFound,
+      shouldRetry = !notFound && retry;
 
     close();
 

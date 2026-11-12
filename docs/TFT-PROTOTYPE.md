@@ -46,8 +46,7 @@ Node 20 이상이 필요합니다. 일반 정적 서버(5173)에서도 샘플 UI
 | js/tft/tft-model.js                       | Riot 응답 정규화, 세트 필터, 이미지와 사용 통계       |
 | data/tft/tft-set17-data.js                | 한국어 정적 메타데이터 인덱스 (자동 생성)             |
 | js/tft/tft-traits.js                      | 특성 아이콘과 툴팁                                    |
-| js/tft/tft-rank.js, js/tft/tft-rank-ui.js | 승급을 포함한 LP 차이와 그래프                        |
-| js/tft/tft-store.js                       | 사용자별 날짜별 랭크 기록                             |
+| js/tft/tft-rank.js                        | 랭크 계산, 날짜별 기록 저장과 LP 그래프              |
 | js/shared/loading.js                      | 메인과 TFT의 공용 로딩 애니메이션                     |
 | js/server/server.js                       | Node 내장 모듈로 만든 Riot 프록시/응답 캐시           |
 | tft-sw.js                                 | 이미지와 정적 메타데이터 캐시                         |

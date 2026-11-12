@@ -12,44 +12,6 @@
   const tooltip = document.getElementById("trait-tooltip");
   const championTooltip = document.getElementById("champion-traits-tooltip");
   let championTarget = null;
-  let itemStats = null,
-    itemStatsFailed = false,
-    itemRequest;
-
-  // 같은 요청이 겹치지 않게 하고 서버의 아이템 통계를 가져옴
-  function loadItemStats() {
-    if (itemRequest) return itemRequest;
-
-    itemRequest = fetch("/assets/js/server/item-stats")
-      .then((response) => {
-        if (!response.ok) throw new Error();
-
-        return response.json();
-      })
-      .then((value) => {
-        itemStats = value;
-        itemStatsFailed = false;
-      })
-      .catch(() => {
-        itemStatsFailed = true;
-      })
-      .finally(() => {
-        itemRequest = null;
-        if (championTarget?.dataset.itemStats) {
-          championTooltip.innerHTML = championContent(
-            championTarget.dataset.championName,
-            true,
-          );
-
-          position(championTarget, championTooltip);
-        }
-      });
-
-    return itemRequest;
-  }
-
-  window.addEventListener("tft-profile-updated", loadItemStats);
-
   const allCard = document.getElementById("trait-all-card");
   let moreButton = null;
   const escape = (value) =>
@@ -300,37 +262,10 @@
     panel.style.top = `${Math.max(10, Math.min(window.innerHeight - box.height - 10, top))}px`;
   }
 
-  // 챔피언 시너지를 보여주고 필요할 때 아이템 TOP 5도 표시
-  function championContent(name, withItems = false) {
+  // 챔피언이 보유한 시너지를 표시
+  function championContent(name) {
     const champion = championsByName.get(name);
     const traits = [...new Set(champion?.traits || [])];
-    const championId = Object.keys(window.TFT_SET17.champions).find(
-      (id) => window.TFT_SET17.champions[id].name === name,
-    );
-    const row = itemStats?.champions?.[championId];
-    const items = Object.entries(row?.items || {})
-      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-      .slice(0, 5);
-    const itemContent = withItems
-      ? `<div class="champion-item-stats"><h4>많이 장착한 아이템 TOP 5</h4>${
-          items.length
-            ? items
-                .map(([id, count]) => {
-                  const item = window.TFT_SET17.items[id];
-                  return `
-                    <div class="item-stat-row">
-                      ${item?.icon ? `<img src="${escape(item.icon)}" alt="">` : ""}
-                      <span>${escape(item?.name || id)}</span>
-                      <b>${((count / row.boards) * 100).toFixed(1).replace(/\.0$/, "")}%</b>
-                    </div>`;
-                })
-                .join("")
-            : `<p>${itemStatsFailed ? "통계를 불러오지 못했어요." : !itemStats ? "통계를 불러오는 중이에요." : "수집된 아이템 기록이 없습니다."}</p>`
-        }
-          <small>조회된 세트 17 랭크 경기 · 해당 챔피언 ${row?.boards || 0}개 보드<br>장착 보드 비율 · 여러 아이템을 장착해 합계는 100%를 넘을 수 있어요.</small>
-        </div>`
-      : "";
-
     return `
         <strong>${escape(name)}</strong>
         <div class="champion-traits-list">
@@ -342,8 +277,7 @@
               )
               .join("") || "<span>시너지 정보 없음</span>"
           }
-        </div>
-        ${itemContent}`;
+        </div>`;
   }
 
   function hideChampion() {
@@ -361,12 +295,7 @@
     hideChampion();
 
     championTarget = target;
-    championTooltip.innerHTML = championContent(
-      target.dataset.championName,
-      Boolean(target.dataset.itemStats),
-    );
-
-    if (target.dataset.itemStats && !itemStats) loadItemStats();
+    championTooltip.innerHTML = championContent(target.dataset.championName);
 
     championTooltip.hidden = false;
 
@@ -397,43 +326,6 @@
     clearTimeout(timer);
 
     if (button === activeButton && !tooltip.hidden) return;
-    if (button.dataset.traitUsage) {
-      const name = button.dataset.traitName;
-      const definition = definitions[name];
-
-      if (!definition) return;
-
-      hide();
-
-      activeButton = button;
-
-      const base =
-        document
-          .querySelector('[data-portrait-mode="base"]')
-          ?.getAttribute("aria-pressed") === "true";
-
-      tooltip.innerHTML = `
-        <div class="trait-tooltip-heading">
-          <img src="${escape(definition.icon)}" alt="">
-          <strong>${escape(name)}</strong>
-        </div>
-        ${renderEffects(definition)}
-        <div class="trait-count-summary">
-          <strong>소속 챔피언 ${new Set(definition.champions).size}명</strong>
-        </div>
-        <div class="trait-members">
-          ${renderMembers(definition, [], base, false)}
-        </div>`;
-
-      tooltip.hidden = false;
-
-      button.setAttribute("aria-describedby", "trait-tooltip");
-
-      position(button);
-
-      return;
-    }
-
     const match = window.TFT_DATA.matches.find(
       (item) => item.id === button.dataset.traitMatch,
     );
@@ -476,11 +368,7 @@
 
   const list = document.getElementById("match-list");
 
-  for (const surface of [
-    list,
-    allCard,
-    document.getElementById("trait-usage"),
-  ]) {
+  for (const surface of [list, allCard]) {
     surface.addEventListener("pointerover", (event) => {
       const button = event.target.closest("[data-trait-name]");
 

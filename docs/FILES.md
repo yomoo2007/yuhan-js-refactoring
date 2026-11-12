@@ -70,17 +70,14 @@ TFT 화면·검색·통계·세트 데이터·브라우저 캐시를 함께 모�
 | [js/tft/tft-api.js](files/js/tft/tft-api.js.md)                   | TFT 프로필·매치 페이지·시즌 기록 조회               |
 | [js/tft/tft-model.js](files/js/tft/tft-model.js.md)               | Riot 응답을 TFT 화면용 데이터로 변환                |
 | [data/tft/tft-set17-data.js](files/data/tft/tft-set17-data.js.md) | TFT 세트 17 챔피언·특성·아이템·전설이 정적 데이터   |
-| [js/tft/tft-rank.js](files/js/tft/tft-rank.js.md)                 | 티어·LP 변환과 한국 시간 기준 일별 랭크 계산        |
-| [js/tft/tft-store.js](files/js/tft/tft-store.js.md)               | 브라우저별 날짜별 랭크 기록 저장과 서비스 워커 등록 |
-| [js/tft/tft-rank-ui.js](files/js/tft/tft-rank-ui.js.md)           | 현재 랭크 요약과 날짜별 LP 그래프 표시              |
+| [js/tft/tft-rank.js](files/js/tft/tft-rank.js.md)                 | 랭크 계산·브라우저 기록 저장·LP 그래프 표시        |
 | [js/tft/tft-feedback.js](files/js/tft/tft-feedback.js.md)         | TFT 검색 실패·플레이어 없음 dialog 표시             |
-| [js/tft/tft-traits.js](files/js/tft/tft-traits.js.md)             | 시너지·챔피언 툴팁, 전체 시너지 패널과 아이템 통계  |
-| [js/tft/tft-traits-data.js](files/js/tft/tft-traits-data.js.md)   | 이전 패치의 일부 특성 설명을 보관한 참고 데이터     |
+| [js/tft/tft-traits.js](files/js/tft/tft-traits.js.md)             | 시너지·챔피언 툴팁과 전체 시너지 패널  |
 | [css/tft.css](files/css/tft.css.md)                               | TFT 기본 레이아웃·프로필·통계·매치 화면 스타일      |
 | [css/tft-extras.css](files/css/tft-extras.css.md)                 | TFT 오류창·랭크·시너지·아이템 상세 보완 스타일      |
 | [tft-sw.js](files/tft-sw.js.md)                                   | TFT 이미지와 정적 메타데이터의 브라우저 캐시        |
 
-정적 메타데이터는 `data/tft/`, 실행 로직과 샘플 생성은 `js/tft/`에 있습니다. `tft-traits-data.js`는 이전 패치 참고용이며 현재 화면에서는 불러오지 않습니다. 전용 이미지는 `assets/tft/set17/`, `companions/`, `profiles/`, `ranks/`, `traits/`, `feedback/`에 보관합니다. [TFT 구현 기록](TFT-PROTOTYPE.md)과 [이미지 제작 기록](TFT-IMAGE-PROMPTS.md)도 참고하세요.
+정적 메타데이터는 `data/tft/`, 실행 로직과 샘플 생성은 `js/tft/`에 있습니다. 전용 이미지는 `assets/tft/set17/`, `companions/`, `profiles/`, `ranks/`, `traits/`, `feedback/`에 보관합니다. [TFT 구현 기록](TFT-PROTOTYPE.md)과 [이미지 제작 기록](TFT-IMAGE-PROMPTS.md)도 참고하세요.
 
 ## 서버와 로컬 실행
 

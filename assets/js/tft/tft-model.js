@@ -2,10 +2,41 @@
 (() => {
   "use strict";
   const pack = window.TFT_SET17;
-  const companionByContent = new Map(
-    pack.companions.map((c) => [c.contentId.toLowerCase(), c]),
-  );
-  const companionBySkin = new Map(pack.companions.map((c) => [c.skinId, c]));
+  const companionByContent = new Map();
+  const companionByItem = new Map();
+  const companionBase = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global";
+  let companionRequest;
+
+  // 전설이 목록은 최신 메타데이터에서 불러와 ID로 찾습니다.
+  function loadCompanions() {
+    if (companionRequest) return companionRequest;
+
+    companionRequest = fetch(`${companionBase}/ko_kr/v1/companions.json`, {
+      signal: AbortSignal.timeout(8000),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("companion metadata unavailable");
+        return response.json();
+      })
+      .then((entries) => {
+        if (!Array.isArray(entries)) throw new Error("invalid companion metadata");
+        for (const entry of entries) {
+          const path = entry.loadoutsIcon;
+          if (!entry.contentId || typeof path !== "string" || !path.startsWith("/lol-game-data/assets/")) continue;
+          const imagePath = path.slice("/lol-game-data/assets/".length).toLowerCase();
+          const companion = {
+            name: entry.name || "전설이",
+            image: `${companionBase}/default/${imagePath}`,
+            contentId: entry.contentId,
+          };
+          companionByContent.set(String(entry.contentId).toLowerCase(), companion);
+          if (entry.itemId != null) companionByItem.set(String(entry.itemId), companion);
+        }
+      })
+      .catch(() => { companionRequest = null; });
+    return companionRequest;
+  }
+
   const traitsById = new Map(
     Object.entries(pack.traits).map(([name, t]) => [t.id, { ...t, name }]),
   );
@@ -14,7 +45,7 @@
   const imageFallbacks = new Map();
   // 검색할 때 한 번만 이미지 메타데이터를 받아 기존 세트 정보에 연결합니다.
   function loadAssets() {
-    if (assetRequest) return assetRequest;
+    if (assetRequest) return Promise.all([assetRequest, loadCompanions()]);
     assetRequest = fetch("/api/tft/assets", { signal: AbortSignal.timeout(6000) })
       .then((response) => { if (!response.ok) throw new Error("asset metadata unavailable"); return response.json(); })
       .then((data) => {
@@ -23,14 +54,9 @@
             imageFallbacks.set(url, pack.champions[id].tftImage);
             pack.champions[id].tftImage = url;
           }
-        for (const [id, url] of Object.entries(data["tft-item"] || {}))
-          if (pack.items[id]) {
-            imageFallbacks.set(url, pack.items[id].icon);
-            pack.items[id].icon = url;
-          }
       })
       .catch(() => { assetRequest = null; });
-    return assetRequest;
+    return Promise.all([assetRequest, loadCompanions()]);
   }
 
   // 프로필 29번은 로컬 이미지, 나머지는 외부 이미지 사용
@@ -43,13 +69,11 @@
   }
 
   function companion(value) {
-    const found =
-      companionByContent.get(String(value?.content_ID || "").toLowerCase()) ||
-      companionBySkin.get(value?.skin_ID);
-
-    return found
-      ? { name: found.name, image: found.icon, contentId: found.contentId }
-      : { name: "전설이 정보 없음", image: null };
+    const contentId = value?.content_ID ?? value?.contentId ?? value?.content_id;
+    const itemId = value?.item_ID ?? value?.itemId ?? value?.skin_ID ?? value?.skinId;
+    return companionByContent.get(String(contentId ?? "").toLowerCase()) ||
+      companionByItem.get(String(itemId ?? "")) ||
+      { name: "전설이 정보 없음", image: null };
   }
 
   // 경기의 챔피언 ID를 이름, 이미지, 아이템 정보와 연결
@@ -64,16 +88,12 @@
       tftImage: metadata?.tftImage || null,
       baseImage: window.GAME_ASSETS.championPortrait(metadata?.baseId),
       traitNames: metadata?.traits || [],
-      items: (value.itemNames || []).map((id) => ({
-        id,
-        name: pack.items[id]?.name || id,
-        image: pack.items[id]?.icon || null,
-      })),
+      itemCount: (value.itemNames || []).length,
     };
   }
 
-  // 세트 17 화면에 필요한 값만 정리하고 샘플인지 구분
-  function normalize(result, { isDemo = false } = {}) {
+  // 세트 17 화면에 필요한 값만 정리
+  function normalize(result) {
     const matches = result.matches
       .filter(({ match }) => Number(match.info.tft_set_number) === 17)
       .map(({ match, participant: p }) => {
@@ -94,7 +114,7 @@
         const active = traits.filter((t) => t.tierCurrent > 0);
         // 장착 아이템이 많고 비용이 높은 챔피언을 대표로 선택
         const carry = [...units].sort(
-          (a, b) => b.items.length - a.items.length || b.cost - a.cost,
+          (a, b) => b.itemCount - a.itemCount || b.cost - a.cost,
         )[0];
         const mode =
           match.info.queue_id === 1100
@@ -138,7 +158,6 @@
       });
 
     return {
-      isDemo,
       seasonHistoryState: "idle",
       account: result.account,
       summoner: result.summoner,
@@ -150,58 +169,6 @@
       failedMatchIds: result.failedMatchIds || [],
       nextStart: result.nextStart || 0,
       hasMore: Boolean(result.hasMore),
-    };
-  }
-
-  // 솔로 랭크만 집계하고 같은 경기의 같은 챔피언은 한 번만 셈
-  function statistics(matches) {
-    const ranked = matches.filter((m) => m.mode === "ranked");
-    const champions = new Map();
-    const traits = new Map();
-
-    function add(map, key, meta, placement) {
-      const old = map.get(key) || { ...meta, count: 0, total: 0, top: 0 };
-
-      old.count++;
-      old.total += placement;
-
-      if (placement <= 4) old.top++;
-
-      map.set(key, old);
-    }
-
-    for (const match of ranked) {
-      const seen = new Set();
-
-      for (const u of match.units)
-        if (!seen.has(u.id)) {
-          add(champions, u.id, u, match.placement);
-
-          seen.add(u.id);
-        }
-
-      for (const t of match.traits.filter((t) => t.tierCurrent > 0))
-        add(
-          traits,
-          t.id,
-          { ...t, image: pack.traits[t.name]?.icon },
-          match.placement,
-        );
-    }
-
-    const finish = (map) =>
-      [...map.values()]
-        .map((row) => ({
-          ...row,
-          average: row.total / row.count,
-          usage: ranked.length ? (row.count / ranked.length) * 100 : 0,
-        }))
-        .sort((a, b) => b.count - a.count || a.average - b.average);
-
-    return {
-      sample: ranked.length,
-      champions: finish(champions),
-      traits: finish(traits),
     };
   }
 
@@ -260,7 +227,6 @@
     imageFallbacks,
     profileImage,
     companion,
-    statistics,
     roundLabel,
     distribution,
   };

@@ -67,130 +67,6 @@
   font-size: 12px;
 }
 
-.usage-panel {
-  grid-column: 1 / -1;
-  padding: 20px 23px 0;
-}
-
-.usage-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.usage-heading h2 {
-  font-size: 14px;
-}
-
-.usage-heading p {
-  font-size: 10px;
-  color: #8c9ab0;
-  margin-top: 5px;
-}
-
-.usage-heading select {
-  padding: 7px 10px;
-  border: 1px solid #e0e7f1;
-  border-radius: 5px;
-  background: white;
-  color: #667b9d;
-  font: inherit;
-  font-size: 11px;
-}
-
-.usage-tables {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 18px;
-}
-
-.usage-tables h3 {
-  font-size: 11px;
-  color: #52698c;
-  padding-bottom: 10px;
-}
-
-.usage-tables table {
-  border-collapse: collapse;
-  width: 100%;
-  table-layout: fixed;
-  font-size: 11px;
-}
-
-.usage-tables th {
-  font-size: 10px;
-  color: #93a0b5;
-  font-weight: 500;
-  background: #f7f9fc;
-  padding: 9px 6px;
-}
-
-.usage-tables th:first-child {
-  width: 42%;
-  text-align: left;
-  padding-left: 10px;
-}
-
-.usage-tables td {
-  padding: 8px 6px;
-  text-align: center;
-  border-bottom: 1px solid #edf1f6;
-  color: #617b9e;
-}
-
-.usage-tables td:nth-child(3) {
-  color: #3686cb;
-  font-weight: 600;
-}
-
-.usage-tables td small {
-  display: block;
-  color: #acb5c3;
-  font-size: 9px;
-  margin-top: 2px;
-}
-
-.usage-name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-align: left;
-  color: #516680;
-}
-
-.usage-name img {
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
-  border-radius: 5px;
-  flex-shrink: 0;
-}
-
-.usage-name img.usage-trait-image {
-  object-fit: contain;
-  padding: 5px;
-  background: #63788e;
-}
-
-.usage-expand {
-  display: block;
-  width: 100%;
-  padding: 15px;
-  font-size: 10px;
-  color: #768caf;
-  background: none;
-}
-
-.usage-expand:hover {
-  color: #4169e1;
-}
-
-.usage-empty {
-  height: 120px;
-}
-
 .portrait-toolbar {
   grid-column: 1 / -1;
   display: flex;
@@ -258,28 +134,6 @@
   align-items: flex-start;
   align-content: flex-start;
   min-height: 171px;
-}
-
-.record-team .unit-items {
-  gap: .5px;
-  min-height: 16px;
-  margin-top: 3px;
-}
-
-.record-team .unit-items>span {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.unit-items img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
 }
 
 .record-body {
@@ -364,18 +218,6 @@
     gap: 8px;
   }
 
-  .record-team .unit-items {
-    min-height: 13px;
-    gap: 1px;
-  }
-
-  .record-team .unit-items>span {
-    width: 13px;
-    height: 13px;
-    flex-basis: 13px;
-    border-radius: 3px;
-  }
-
   .record-team .unit-name {
     font-size: 8px;
     line-height: 10px;
@@ -413,27 +255,6 @@
 }
 
 @media (max-width: 600px) {
-  .usage-panel {
-    padding: 16px 13px 0;
-  }
-
-  .usage-heading {
-    align-items: flex-start;
-  }
-
-  .usage-heading h2 {
-    font-size: 12px;
-  }
-
-  .usage-heading select {
-    max-width: 105px;
-    font-size: 10px;
-  }
-
-  .usage-tables {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
 
   .portrait-toolbar {
     margin: 0;
@@ -1228,64 +1049,13 @@
     gap: 7px;
   }
 
-  .preview-loading {
-    padding: 6px 8px;
-    font-size: 9px;
-  }
 }
 
-
-
-/* 매치별 장착 아이템 상세와 서버에서 수집한 아이템 통계를 표시합니다. */
+/* 매치 라운드 표시 */
 .record-round {
   font-weight: 600;
   color: #627da8;
   white-space: nowrap;
-}
-
-.equipped-units {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 24px;
-}
-
-.equipped-unit {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.equipped-champion {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-size: 12px;
-}
-
-.equipped-champion>img {
-  width: 32px;
-  height: 32px;
-  border-radius: 5px;
-  object-fit: cover;
-}
-
-.equipped-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-}
-
-.equipped-items>span {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-}
-
-.equipped-items img {
-  width: 24px;
-  height: 24px;
-  border-radius: 5px;
 }
 
 .season-history-label {
@@ -1300,63 +1070,6 @@
 
 #rank-chart-range b {
   font-weight: 800;
-}
-
-.usage-name[data-item-stats] {
-  cursor: help;
-  border-radius: 4px;
-}
-
-/* 서버에서 수집한 챔피언별 아이템 장착 통계입니다. */
-.champion-item-stats {
-  border-top: 1px solid #465264;
-  margin-top: 12px;
-  padding-top: 10px;
-  min-width: 225px;
-}
-
-.champion-item-stats h4 {
-  font-size: 11px;
-  margin: 0 0 10px;
-}
-
-.item-stat-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin: 7px 0;
-  font-size: 11px;
-}
-
-.item-stat-row img {
-  width: 24px;
-  height: 24px;
-  border-radius: 5px;
-}
-
-.item-stat-row b {
-  margin-left: auto;
-  color: #78d2bd;
-  white-space: nowrap;
-}
-
-.champion-item-stats small {
-  display: block;
-  margin-top: 12px;
-  color: #a5b4cb;
-  font-size: 9px;
-  line-height: 1.6;
-}
-
-.champion-item-stats p {
-  font-size: 11px;
-  color: #b6c2d5;
-}
-
-@media(max-width:600px) {
-  .equipped-units {
-    grid-template-columns: 1fr;
-  }
 }
 
 .distribution-panel {
@@ -1389,9 +1102,4 @@
   color: var(--blue);
   font-size: 10px;
   text-decoration: underline;
-}
-
-.usage-name[data-trait-usage] {
-  cursor: help;
-  border-radius: 4px;
 }

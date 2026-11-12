@@ -83,7 +83,7 @@ const completed = await TFT_LOADING.preview("로딩 미리보기", {
 // 시간 경과 또는 hide(true)는 true, 닫기·Escape는 false입니다.
 ```
 
-메인은 영상이 모두 준비되면 최소 3초 뒤 창을 닫고 최대 8초까지 기다립니다. 닫기·Escape는 영상 준비를 건너뛰어 메인 선택 화면을 표시합니다. TFT의 ‘로딩 미리보기’ 버튼은 `duration: 0`으로 수동 종료할 때까지 반복합니다.
+메인은 영상이 모두 준비되면 최소 3초 뒤 창을 닫고 최대 8초까지 기다립니다. 닫기·Escape는 영상 준비를 건너뛰어 메인 선택 화면을 표시합니다.
 
 ## 오류 안내창
 
@@ -142,11 +142,11 @@ TFT_TRAIT_UI.hide();
 
 닫기 버튼, 같은 더보기 버튼 재클릭, Escape는 열기 버튼으로 초점을 되돌립니다. 외부 클릭·패널 밖 초점 이동·창 크기 변경·외부 스크롤은 패널을 닫습니다. 패널 내부 스크롤은 유지합니다. `TFT_TRAIT_UI.hide()`의 호출은 초점을 강제로 복원하지 않습니다.
 
-관련 툴팁 `#trait-tooltip`, `#champion-traits-tooltip`, `#rank-chart-tooltip`는 `role="tooltip"`이며 모달이 아닙니다. 앞의 두 개는 `tft-traits.js`, 랭크 툴팁은 `tft-rank-ui.js`에서 관리합니다.
+관련 툴팁 `#trait-tooltip`, `#champion-traits-tooltip`, `#rank-chart-tooltip`는 `role="tooltip"`이며 모달이 아닙니다. 앞의 두 개는 `tft-traits.js`, 랭크 툴팁은 `tft-rank.js`에서 관리합니다.
 
 ## 동작 확인 순서
 
-- TFT 프로필의 ‘로딩 미리보기’를 눌러 반복 재생과 닫기·Escape를 확인합니다.
+- TFT 검색 시 로딩 화면과 닫기·Escape 동작을 확인합니다.
 - ‘실패 화면’, ‘유저 없음’에서 문구·주요 버튼의 중앙 정렬·초점 이동을 확인합니다.
 - 실제 요청 취소 시 오류창이 뜨지 않고 비활성 버튼이 복구되는지 확인합니다.
 - 시너지가 많은 매치에서 더보기·닫기·외부 클릭과 키보드 이동을 확인합니다.

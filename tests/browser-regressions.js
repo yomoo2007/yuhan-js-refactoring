@@ -1,4 +1,4 @@
-/* 실제 DOM에서 탐색·상세 펼침·초점 보존을 검사합니다. docs/TESTING.md */
+/* 실제 DOM에서 탐색·경기 카드·초점 보존을 검사합니다. docs/TESTING.md */
 (async () => {
   const report = document.getElementById("results");
   const assert = (condition, message) => { if (!condition) throw new Error(message); };
@@ -58,17 +58,17 @@
       assert(w.TFT_DATA.account.gameName === "Last", "늦은 응답이 마지막 검색을 덮어썼습니다");
       assert(doc.getElementById("riot-id").value === "Last#KR1", "검색 입력값이 복원되지 않았습니다");
     });
-    await check("추가 수집 중 매치 상세·초점·시너지 패널 유지", async () => {
+    await check("추가 수집 중 매치 카드·초점·시너지 패널 유지", async () => {
       w.fixture.search("History").resolve(true);
       await settle();
+      for (let attempt = 0; !w.fixture.seasons.length && attempt < 100; attempt++) await settle();
       const season = w.fixture.seasons.at(-1);
+      assert(season, "추가 수집이 시작되지 않았습니다");
       const card = doc.querySelector("#match-list > [data-match-id]");
-      const button = card.querySelector("[data-match]");
-      button.click();
+      const button = card.querySelector("[data-champion-name]");
       button.focus({ preventScroll: true });
       season.options.onPage(w.fixture.page(1));
       assert(doc.querySelector("#match-list > [data-match-id]") === card, "기존 카드를 교체했습니다");
-      assert(!card.querySelector(".match-detail").hidden, "매치 상세를 닫았습니다");
       assert(doc.activeElement === button, "키보드 초점이 유실되었습니다");
       const more = doc.querySelector("[data-traits-more]");
       more.click();
@@ -79,14 +79,14 @@
       season.resolve({ nextStart: 22, hasMore: false, failedMatchIds: [] });
       await settle();
       assert(!doc.getElementById("trait-all-card").hidden, "수집 완료 시 패널을 닫았습니다");
-      assert(!card.querySelector(".match-detail").hidden, "수집 완료 시 상세를 닫았습니다");
     });
-    await check("초상화 변경 시 펼친 상세 상태 유지", async () => {
+    await check("초상화 변경 시 경기 카드 유지", async () => {
       doc.querySelector("[data-traits-close]").click();
       const matchId = doc.querySelector("#match-list > [data-match-id]").dataset.matchId;
       doc.querySelector('[data-portrait-mode="base"]').click();
       const card = [...doc.querySelectorAll("#match-list > [data-match-id]")].find((entry) => entry.dataset.matchId === matchId);
-      assert(!card.querySelector(".match-detail").hidden, "초상화 변경으로 펼친 상세를 잃었습니다");
+      assert(card && card.querySelector("[data-champion-name]"), "초상화 변경 후 경기 카드가 사라졌습니다");
+      assert(!card.querySelector(".unit-items, .match-detail"), "삭제된 아이템이 표시됩니다");
     });
     document.getElementById("status").textContent = "전체 통과 (5개 브라우저 회귀 검사)";
     document.documentElement.dataset.result = "passed";

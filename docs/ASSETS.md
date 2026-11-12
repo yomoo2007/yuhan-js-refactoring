@@ -48,7 +48,7 @@ GAME_ASSETS.championPortrait(-1);
 
 1. 폴더 역할과 파일명 규칙에 맞춰 이미지를 추가합니다.
 2. 공통 기본 초상화라면 `assets.js`의 `localPortraitIds`에 ID를 등록합니다. 세트 17 이미지는 `data/tft/tft-set17-data.js`의 해당 경로를 수정합니다.
-3. 프로필·티어·버섯처럼 동적 파일명을 구성하는 코드는 각각 `tft-model.js`, `tft-rank-ui.js`, `shared/loading.js`도 확인합니다.
+3. 프로필·티어·버섯처럼 동적 파일명을 구성하는 코드는 각각 `tft-model.js`, `tft-rank.js`, `shared/loading.js`도 확인합니다.
 4. HTML의 초기 이미지와 preload, 기존 MD의 경로도 갱신합니다.
 5. TFT 자산의 경로나 내용을 바꾸면 `tft-sw.js`의 캐시 버전을 올립니다. 현재 버전은 캐시 실패 대응을 포함한 `tft-set17-assets-16.9-v6`입니다.
 
